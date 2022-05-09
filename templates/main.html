@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ASMR Study</title>
+
+    <!--    Bootstrap css-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+          rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
+          crossorigin="anonymous">
+
+    <!--    Custom css 추가-->
+    <link rel="stylesheet" href="../static/main.css">
+
+    <!--jquery cdn추가-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+
+    <!-- Bootstrap js -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+            crossorigin="anonymous"></script>
+
+    <!--cookie cdn추가-->
+    <script type="text/javascript"
+            src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+    <!--    페이지 아이콘-->
+    <script>
+        $(window).on('load', function () {
+            var target = $('.hotList').find('.col');
+            target.each(function(){
+                var link = $(this).find('img').attr("alt");
+                var span = $(this).find('span');
+                $.ajax({
+                    type: "POST",
+                    url: "/getViewers",
+                    data: {
+                        link: link
+                    },
+                    success: function (response) {
+                        span.text(response['viewers']);
+                    }
+                })
+            })
+        })
+    </script>
+</head>
+<body>
+<header>
+
+</header>
+<section class="section">
+
+</section>
+<section class="section">
+    <div class="container">
+        <h2 class="title">Hot list</h2>
+        <div class="hotList">
+            {% if asmrs %}
+            {% for asmr in asmrs %}
+            <div class="col" onclick="location.href='{{ asmr.link }}';">
+                    <img src="{{ asmr.img }}" width="360" alt="{{ asmr.link }}">
+                <p>{{ asmr.title }}</p>
+                <p>시청자 수: <span class="viewers"></span></p>
+            </div>
+            {% endfor %}
+            {% endif %}
+        </div>
+    </div>
+</section>
+<section class="section">
+
+</section>
+</body>
+</html>
