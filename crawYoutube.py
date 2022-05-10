@@ -40,6 +40,7 @@ if data.ok:
             link = "https://www.youtube.com" + val['videoRenderer']['navigationEndpoint']['commandMetadata']['webCommandMetadata']['url']
             #DB 저장을 위해 사전 구조를 만듬
             doc = {
+                'id':idx,
                 'title': title,
                 'img': img,
                 'link': link,

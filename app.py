@@ -35,9 +35,14 @@ def login():
 def home():
     token_receive = request.cookies.get('mytoken')
     try:
+        # DB에서 저장된 asmrs 리스트를 가져다가 뽑아옴
+        asmr_list = list(db.asmrs.find({}))
+
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
         user_info = db.user.find_one({"username": payload["id"]})
-        return render_template('main.html', user_info=user_info)
+        # Jinja2 방식으로 SSR(Server side rendering)를 사용해 main.html 페이지를 렌더링
+        # 렌더링 시 asmrs라는 이름으로 가져온 asmr_list 데이터를 보내줌
+        return render_template('main.html', user_info=user_info, asmrs=asmr_list)
 
 
     except jwt.ExpiredSignatureError:
@@ -95,16 +100,6 @@ def index():
     # return render_template('index.html')
 
 
-@app.route("/main", methods=["GET"])
-def main():
-    # DB에서 저장된 asmrs 리스트를 가져다가 뽑아옴
-    asmr_list = list(db.asmrs.find({}))
-
-    # return jsonify({'asmrs':asmr_list})
-
-    # Jinja2 방식으로 SSR(Server side rendering)를 사용해 main.html 페이지를 렌더링
-    # 렌더링 시 asmrs라는 이름으로 가져온 asmr_list 데이터를 보내줌
-    return render_template('main.html', asmrs=asmr_list)
 
 @app.route("/search", methods=["GET"])
 def search():
