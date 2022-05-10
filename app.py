@@ -31,7 +31,7 @@ def login():
     return render_template('login.html', msg=msg)
 
 
-@app.route('/main')
+@app.route('/post')
 def home():
     token_receive = request.cookies.get('mytoken')
     try:
