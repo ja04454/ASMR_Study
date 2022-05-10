@@ -28,6 +28,9 @@
             src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
     <!--    페이지 아이콘-->
     <script>
+        //페이지 로딩 완료 후, Server에서 시청자 수를 크롤링해 가져오기 위한 기능
+        //다만 성능적으로 부하가 심하니 폐기
+        /*
         $(window).on('load', function () {
             var target = $('.hotList').find('.col');
             target.each(function(){
@@ -45,6 +48,7 @@
                 })
             })
         })
+        */
     </script>
 </head>
 <body>
@@ -58,12 +62,14 @@
     <div class="container">
         <h2 class="title">Hot list</h2>
         <div class="hotList">
+            <!-- jinja2를 사용해 Server에서 처리되는 구문들 -->
             {% if asmrs %}
             {% for asmr in asmrs %}
             <div class="col" onclick="location.href='{{ asmr.link }}';">
                     <img src="{{ asmr.img }}" width="360" alt="{{ asmr.link }}">
                 <p>{{ asmr.title }}</p>
-                <p>시청자 수: <span class="viewers"></span></p>
+                <p>시청자 수: <span class="viewers">{{ asmr.viewers }}</span></p>
+                <p>{{ asmr._id }}</p>
             </div>
             {% endfor %}
             {% endif %}
