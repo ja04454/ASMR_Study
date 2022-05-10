@@ -5,13 +5,14 @@ from pymongo import MongoClient
 import requests
 import certifi
 import re
+import jwt
+import hashlib
 
 from datetime import datetime, timedelta
 from apscheduler.schedulers.background import BackgroundScheduler
 
 client = MongoClient('mongodb+srv://test:sparta@cluster0.2rz7w.mongodb.net/Cluster0?retryWrites=true&w=majority',
                      tlsCAFile=certifi.where())
-
 db = client.ASMR_Study
 
 app = Flask(__name__)
@@ -96,8 +97,6 @@ def index():
 
 @app.route("/main", methods=["GET"])
 def main():
-    asmr_list = list(db.asmrs.find({}, {'_id': False}))
-
     # DB에서 저장된 asmrs 리스트를 가져다가 뽑아옴
     asmr_list = list(db.asmrs.find({}))
 
@@ -106,6 +105,16 @@ def main():
     # Jinja2 방식으로 SSR(Server side rendering)를 사용해 main.html 페이지를 렌더링
     # 렌더링 시 asmrs라는 이름으로 가져온 asmr_list 데이터를 보내줌
     return render_template('main.html', asmrs=asmr_list)
+
+@app.route("/search", methods=["GET"])
+def search():
+
+    word_receive = request.args['word']
+
+    # db에서 특정 문자 포함($regex), 옵션(대소문자 상관없이)을 줘서 가져옴
+    find_list = list(db.asmrs.find({'title': {'$regex':word_receive,'$options':'i'}}))
+
+    return render_template('search.html', find_asmr=find_list)
 
 
 # 20220509 김윤교 작업본, Client단에서 시청자 수를 가져오기 위해 만든 크롤링
