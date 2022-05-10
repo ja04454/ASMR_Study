@@ -51,16 +51,16 @@
         */
     </script>
     <script>
-        let asmrs = {{ asmrs|tojson }}
         let asmr_title_list = []
-        for (let i = 0; i < asmrs.length; i++) {
-            asmr_title_list.push(asmrs[i]["title"])
-        }
-        console.log(asmr_title_list[1])
+        {% if asmrs %}
+        {% for asmr in asmrs %}
+        asmr_title_list.push("{{ asmr.title }}".toLowerCase());
+        {% endfor %}
+        {% endif %}
 
         function find_word() {
-            let word = $("#input-word").val()
-            {#alert(word)#}
+            let word = $("#input-word").val().toLowerCase()
+
             if (word == "") {
                 alert("검색어를 입력해주세요")
                 return
@@ -70,7 +70,9 @@
                 return data.indexOf(word) != -1
             })
 
-            alert(result)
+
+
+
 
         }
     </script>
