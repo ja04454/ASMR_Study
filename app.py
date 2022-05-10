@@ -167,21 +167,25 @@ def getViewers():
 
         # requests가 정상인 경우
         if data.ok:
-            # 가져온 페이지 데이터를 text 형태로 변환해 videoViewCountRenderer란 단어를 검색한 뒤 그 위치 반환
-            startIndex = data.text.find('videoViewCountRenderer')
+            #현재 영상이 Live 영상인지 확인
+            if (data.text.find('"isLiveContent":true') != -1):
+                # 가져온 페이지 데이터를 text 형태로 변환해 videoViewCountRenderer란 단어를 검색한 뒤 그 위치 반환
+                startIndex = data.text.find('videoViewCountRenderer')
 
-            # 만약 검색된 단어위치가 존재한다면 실행
-            if (startIndex != -1):
-                # videoViewCountRenderer 검색된 위치부터 isLive란 단어를 검색해 그 위치를 찾음
-                endIndex = data.text.find('isLive', startIndex)
-                # 검색된 단어들의 위치를 기반으로 텍스트를 잘라냄
-                targetText = data.text[startIndex:endIndex]
-                # 잘라낸 텍스트에서 문자를 제거하고 숫자(시청자 수)를 추출함
-                viewers = re.sub(r'[^0-9]', '', targetText)
-            db.asmrs.update_one({'_id': asmr['_id']}, {"$set": {"viewers": viewers}})
+                # 만약 검색된 단어위치가 존재한다면 실행
+                if (startIndex != -1):
+                    # videoViewCountRenderer 검색된 위치부터 isLive란 단어를 검색해 그 위치를 찾음
+                    endIndex = data.text.find('isLive', startIndex)
+                    # 검색된 단어들의 위치를 기반으로 텍스트를 잘라냄
+                    targetText = data.text[startIndex:endIndex]
+                    # 잘라낸 텍스트에서 문자를 제거하고 숫자(시청자 수)를 추출함
+                    viewers = re.sub(r'[^0-9]', '', targetText)
+                db.asmrs.update_one({'_id': asmr['_id']}, {"$set": {"viewers": viewers}})
+            else:
+                db.asmrs.update_one({'_id': asmr['_id']}, {"$set": {"viewers": ''}})
 
 
-# 스케쥴러를 이용해 10분마다 크롤링
+# 스케쥴러를 이용해 1 시간마다 크롤링
 scheduler = BackgroundScheduler()
 scheduler.add_job(func=getViewers, trigger="interval", seconds=6000)
 scheduler.start()
