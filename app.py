@@ -9,6 +9,7 @@ import re
 from apscheduler.schedulers.background import BackgroundScheduler
 
 client = MongoClient('mongodb+srv://test:sparta@cluster0.2rz7w.mongodb.net/Cluster0?retryWrites=true&w=majority',tlsCAFile=certifi.where())
+
 db = client.ASMR_Study
 
 app = Flask(__name__)
@@ -25,8 +26,12 @@ def index():
 
 @app.route("/main", methods=["GET"])
 def main():
+
+    asmr_list = list(db.asmrs.find({}, {'_id':False}))
+
     #DB에서 저장된 asmrs 리스트를 가져다가 뽑아옴
     asmr_list = list(db.asmrs.find({}))
+
     #return jsonify({'asmrs':asmr_list})
 
     #Jinja2 방식으로 SSR(Server side rendering)를 사용해 main.html 페이지를 렌더링

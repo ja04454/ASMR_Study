@@ -50,9 +50,36 @@
         })
         */
     </script>
+    <script>
+        let asmrs = {{ asmrs|tojson }}
+        let asmr_title_list = []
+        for (let i = 0; i < asmrs.length; i++) {
+            asmr_title_list.push(asmrs[i]["title"])
+        }
+        console.log(asmr_title_list[1])
+
+        function find_word() {
+            let word = $("#input-word").val()
+            {#alert(word)#}
+            if (word == "") {
+                alert("검색어를 입력해주세요")
+                return
+            }
+
+            let result = asmr_title_list.filter(function (data){
+                return data.indexOf(word) != -1
+            })
+
+            alert(result)
+
+        }
+    </script>
 </head>
 <body>
 <header>
+    <div class="search">
+        <input id="input-word" type="text"><button onclick="find_word()">검색</button>
+    </div>
 
 </header>
 <section class="section">
