@@ -5,7 +5,7 @@ import requests
 import certifi
 import re
 
-client = MongoClient('mongodb+srv://test:sparta@cluster0.2rz7w.mongodb.net/Cluster0?retryWrites=true&w=majority',tlsCAFile=certifi.where())
+client = MongoClient('mongodb+srv://test:sparta@cluster0.x85pm.mongodb.net/Cluster0?retryWrites=true&w=majority',tlsCAFile=certifi.where())
 db = client.ASMR_Study
 
 app = Flask(__name__)
@@ -21,7 +21,7 @@ def index():
 
 @app.route("/main", methods=["GET"])
 def main():
-    asmr_list = list(db.asmrs.find({}))
+    asmr_list = list(db.asmrs.find({}, {'_id':False}))
     #return jsonify({'asmrs':asmr_list})
     return render_template('main.html',asmrs=asmr_list)
 
