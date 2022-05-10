@@ -27,29 +27,7 @@
     <script type="text/javascript"
             src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
     <!--    페이지 아이콘-->
-    <script>
-        //페이지 로딩 완료 후, Server에서 시청자 수를 크롤링해 가져오기 위한 기능
-        //다만 성능적으로 부하가 심하니 폐기
-        /*
-        $(window).on('load', function () {
-            var target = $('.hotList').find('.col');
-            target.each(function(){
-                var link = $(this).find('img').attr("alt");
-                var span = $(this).find('span');
-                $.ajax({
-                    type: "POST",
-                    url: "/getViewers",
-                    data: {
-                        link: link
-                    },
-                    success: function (response) {
-                        span.text(response['viewers']);
-                    }
-                })
-            })
-        })
-        */
-    </script>
+
     <script>
         function search() {
             let word = $("#input-word").val()
@@ -60,7 +38,6 @@
                 alert(word)
                 window.location.href='/search?word='+word
             }
-
         }
     </script>
 </head>
@@ -76,16 +53,14 @@
 </section>
 <section class="section">
     <div class="container">
-        <h2 class="title">Hot list</h2>
+        <h2 class="title">총 {{ find_asmr|length }}개가 검색되었습니다.</h2>
         <div class="hotList">
-            <!-- jinja2를 사용해 Server에서 처리되는 구문들 -->
-            {% if asmrs %}
-            {% for asmr in asmrs %}
+            {% if find_asmr %}
+            {% for asmr in find_asmr %}
             <div class="col" onclick="location.href='{{ asmr.link }}';">
                     <img src="{{ asmr.img }}" width="360" alt="{{ asmr.link }}">
                 <p>{{ asmr.title }}</p>
                 <p>시청자 수: <span class="viewers">{{ asmr.viewers }}</span></p>
-                <p>{{ asmr._id }}</p>
             </div>
             {% endfor %}
             {% endif %}
