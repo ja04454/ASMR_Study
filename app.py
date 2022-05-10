@@ -183,7 +183,7 @@ def getViewers():
 
 # 스케쥴러를 이용해 10분마다 크롤링
 scheduler = BackgroundScheduler()
-scheduler.add_job(func=getViewers, trigger="interval", seconds=600)
+scheduler.add_job(func=getViewers, trigger="interval", seconds=6000)
 scheduler.start()
 
 # 디버그 모드에선 플라스크는 앱을 두번 로드함

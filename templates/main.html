@@ -81,8 +81,8 @@
             <!-- jinja2를 사용해 Server에서 처리되는 구문들 -->
             {% if asmrs %}
             {% for asmr in asmrs %}
-            <div class="col" onclick="location.href='{{ asmr.link }}';">
-                    <img src="{{ asmr.img }}" width="360" alt="{{ asmr.link }}">
+            <div class="col">
+                    <img src="{{ asmr.img }}" width="360" alt="{{ asmr.link }}" onclick="location.href='{{ asmr.link }}';">
                 <p>{{ asmr.title }}</p>
                 <p>시청자 수: <span class="viewers">{{ asmr.viewers }}</span></p>
             </div>
