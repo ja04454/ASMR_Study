@@ -19,6 +19,13 @@ app = Flask(__name__)
 
 SECRET_KEY = 'SPARTA'
 
+#jwt id 가져오기 모듈화
+def GetJwtId():
+    # token_check()
+    token_receive = request.cookies.get('mytoken')
+    payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+    user_info = db.user.find_one({"username": payload["id"]})
+    return user_info['username']
 
 @app.route('/')
 def intro():
@@ -57,7 +64,7 @@ def home():
 
         # Jinja2 방식으로 SSR(Server side rendering)를 사용해 main.html 페이지를 렌더링
         # 렌더링 시 asmrs라는 이름으로 가져온 asmr_list 데이터를 보내줌
-        return render_template('main.html', user_info=user_info, asmrs=asmr_list, lists=star_arr, username=payload["id"], users_star=users_star)
+        return render_template('main.html', user_info=user_info, asmrs=asmr_list, lists=star_arr, users_star=users_star)
 
 
     except jwt.ExpiredSignatureError:
@@ -70,7 +77,7 @@ def home():
 @app.route('/deleteStar', methods=['PUT'])
 def deleteStar():
     id = request.form['id']
-    username = request.form['username']
+    username = GetJwtId()
 
     db.user.update_one({'username': username}, {'$pull': {'star': id}})
 
@@ -80,7 +87,7 @@ def deleteStar():
 @app.route('/addStar', methods=['PUT'])
 def addStar():
     id = request.form['id']
-    username = request.form['username']
+    username = GetJwtId()
 
     db.user.update_one({'username':username},{'$push':{'star':{'$each':[id],'$position':0}}})
 

@@ -68,12 +68,11 @@
 
         }
 
-        function deleteStar(id,username){
+        function deleteStar(id){
             $.ajax({
                 type:'PUT',
                 url :"/deleteStar",
-                data:{id:id,
-                    username:username
+                data:{id:id
                 },
                 success : function (response){
                     console.log(response)
@@ -91,20 +90,19 @@
                 let svgId = "svg"+temp[i];
                 let btnId = "btn"+temp[i];
                 $('#'+svgId).css({"fill":"#FCC400"});
-                $('#'+btnId).attr("onclick", "deleteStar("+temp[i]+",'{{ username }}')");
+                $('#'+btnId).attr("onclick", "deleteStar("+temp[i]+")");
             }
 
             console.log(temp)
         }
 
-        function addStar(id,username){
+        function addStar(id){
             let idName = "btn"+id
             $('#'+idName).css({"display":"none"})
             $.ajax({
                 type:'PUT',
                 url :"/addStar",
-                data:{id:id,
-                    username:username
+                data:{id:id
                 },
                 success : function (response){
                     console.log(response)
@@ -172,7 +170,7 @@
                     </p>
                 </div>
 
-                <div class="common-bookmark" id="btn{{ asmr.id }}" onclick="addStar({{ asmr.id }},'{{ username }}')">
+                <div class="common-bookmark" id="btn{{ asmr.id }}" onclick="addStar({{ asmr.id }})">
                     <svg id="svg{{ asmr.id }}"  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" style="">
                         <g id="icomoon-ignore"></g>
                         <path d="M96 0v512l160-160 160 160v-512z"></path>
@@ -204,7 +202,7 @@
                                 </p>
                             </div>
 
-                            <div class="common-bookmark" onclick="deleteStar({{ li.id }},'{{ username }}')">
+                            <div class="common-bookmark" onclick="deleteStar({{ li.id }})">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" style="fill:#FCC400">
                                     <g id="icomoon-ignore"></g>
                                     <path d="M96 0v512l160-160 160 160v-512z"></path>
