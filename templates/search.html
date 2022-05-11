@@ -40,6 +40,11 @@
                 window.location.href='/search?word='+word
             }
         }
+        function logout() {
+            $.removeCookie('mytoken', {path: '/main'});
+            alert('로그아웃')
+            window.location.href = '/';
+        }
     </script>
 </head>
 <body style="background-color: #303030">
@@ -58,6 +63,9 @@
                 </li>
             </ul>
         </div>
+        <form class="d-flex">
+            <a class="btn common-btn-grayblue" onclick="logout()">로그아웃</a>
+        </form>
     </div>
 </nav>
 

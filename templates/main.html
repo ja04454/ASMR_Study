@@ -63,6 +63,11 @@
             }
 
         }
+        function logout() {
+            $.removeCookie('mytoken', {path: '/main'});
+            alert('로그아웃')
+            window.location.href = '/';
+        }
     </script>
 </head>
 
@@ -82,6 +87,9 @@
                 </li>
             </ul>
         </div>
+        <form class="d-flex">
+            <a class="btn common-btn-grayblue" onclick="logout()">로그아웃</a>
+        </form>
     </div>
 </nav>
 
