@@ -51,6 +51,10 @@
         */
     </script>
     <script>
+        $(document).ready(function () {
+            showStar();
+        });
+
         function search() {
             let word = $("#input-word").val()
 
@@ -62,6 +66,49 @@
             }
 
         }
+        function deleteStar(id,username){
+            $.ajax({
+                type:'PUT',
+                url :"/deleteStar",
+                data:{id:id,
+                    username:username
+                },
+                success : function (response){
+                    console.log(response)
+                    window.location.reload()
+                }
+
+            })
+        }
+
+        //이미 즐겨찾기 되어있는 곳에는 즐찾 버튼이 뜨지 않기
+        function showStar(){
+            let temp = {{ users_star | tojson }}
+            for(let i=0; i<temp.length; i++){
+                let idName = "btn"+temp[i]
+                $('#'+idName).css({"display":"none"})
+            }
+
+            console.log(temp)
+        }
+
+        function addStar(id,username){
+            let idName = "btn"+id
+            $('#'+idName).css({"display":"none"})
+            $.ajax({
+                type:'PUT',
+                url :"/addStar",
+                data:{id:id,
+                    username:username
+                },
+                success : function (response){
+                    console.log(response)
+                    window.location.reload()
+                }
+
+            })
+        }
+
     </script>
 </head>
 <body>
@@ -84,7 +131,9 @@
             <div class="col">
                     <img src="{{ asmr.img }}" width="360" alt="{{ asmr.link }}" onclick="location.href='{{ asmr.link }}';">
                 <p>{{ asmr.title }}</p>
-                <p>시청자 수: <span class="viewers">{{ asmr.viewers }}</span></p>
+                <p>시청자 수: <span class="viewers">{{ asmr.viewers }}</span>
+                    <button id="btn{{ asmr.id }}" class="starBtn" onclick="addStar({{ asmr.id }},'{{ username }}')">즐찾</button>
+                </p>
             </div>
             {% endfor %}
             {% endif %}
@@ -92,7 +141,22 @@
     </div>
 </section>
 <section class="section">
-
+    <div class="container">
+        <h2 clas="title">즐겨찾기</h2>
+        <div class="hotList">
+            {% for list in lists %}
+                {% for li in list %}
+                    <div class="col">
+                        <img src="{{ li.img }}" width="360" alt="{{ li.link }}" onclick="location.href='{{ li.link }}';">
+                        <p>{{ li.title }}</p>
+                        <p>시청자 수: <span class="viewers">{{ li.viewers }}</span>
+                            <button class="starBtn" onclick="deleteStar({{ li.id }},'{{ username }}')">즐겨찾기 해제</button>
+                        </p>
+                    </div>
+                {% endfor %}
+            {% endfor %}
+        </div>
+    </div>
 </section>
 </body>
 </html>
