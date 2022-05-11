@@ -119,6 +119,13 @@
                     <p class="card-text common-post-text common-text-elli">{{ asmr.title }}</p>
                     <p>시청자 수: <span class="viewers">{{ asmr.viewers }}</span></p>
                 </div>
+
+                <div class="common-bookmark" id="star_${asmr.id}">
+                    <svg id="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" style="">
+                        <g id="icomoon-ignore"></g>
+                        <path d="M96 0v512l160-160 160 160v-512z"></path>
+                    </svg>
+                </div>
             </div>
         </div>
         {% endfor %}

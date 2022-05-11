@@ -54,3 +54,17 @@
 .common-over-hide{
     overflow:hidden;
 }
+
+.common-bookmark svg {
+    position: absolute;
+    top: 0px;
+    fill: white;
+    width: 30px;
+    opacity: .8;
+    z-index: 1;
+}
+
+.common-bookmark svg:hover {
+    cursor: pointer;
+    opacity: 1;
+}
