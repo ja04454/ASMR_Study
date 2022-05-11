@@ -105,6 +105,53 @@
         </div>
     </div>
 
+    <!-- 데이터 추가하기 modal -->
+    <div>
+{#        <a href="#" data-toggle="modal" data-target="#myModal">추가하기</a>#}
+        <button id="open_modal" type="button" data-toggle="modal" data-target="#myModal">모달 창 열기</button>
+        <div class="modal fade" id="myModal" data-backdrop="static" data-keyboard="false">
+            <div class="modal-dialog modal-l modal-dialog-centered">
+                <div class="modal-content">
+
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                        <h4 class="modal-title">ASMR 영상 추가하기</h4>
+                    </div>
+
+                    <!-- Modal body -->
+                    <form id="myform" >
+                    <div class="modal-body">
+                        <div class="mb-3 row">
+                            <label for="title" class="col-sm-2 col-form-label">TITLE</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="title">
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <label for="link" class="col-sm-2 col-form-label">LINK</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="link">
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <label for="image" class="col-sm-2 col-form-label">IMAGE</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="image">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Modal footer -->
+                    <div class="modal-footer">
+                        <button id="save_modal" type="button" class="btn btn-secondary">Save</button>
+                        <button id="close_modal"type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="w-75 text-white m-auto">
         <h2>Hot list</h2>
     </div>
@@ -159,6 +206,64 @@
         }
         return false;
     });
+</script>
+<script>
+    $('#open_modal').click(function (e) {
+        e.preventDefault();
+        $('#myModal').modal("show");
+    });
+
+    $('#close_modal').click(function (e) {
+        $('#myModal').modal("hide");
+    });
+
+    $('#save_modal').click(function (e) {
+        let title = $('#title').val()
+        let link = $('#link').val()
+        let img = $('#image').val()
+
+        $.ajax({
+            type: "POST",
+            url: "/saveAsmr",
+            data: {
+                title_give: title,
+                link_give: link,
+                img_give: img
+            },
+            success: function (response) {
+                $('#myform')[0].reset()
+                $('#myModal').modal("hide")
+                alert(response['msg'])
+                window.location.reload()
+            }
+        });
+    });
+
+
+
+
+</script>
+<script>
+    {#function save_asmr() {#}
+    {#    let title = $('#title').val()#}
+    {#    let link = $('#link').val()#}
+    {#    let img = $('#image').val()#}
+    {##}
+    {#    $.ajax({#}
+    {#            type: "POST",#}
+    {#            url: "/saveAsmr",#}
+    {#            data: {#}
+    {#                title_give: title,#}
+    {#                link_give: link,#}
+    {#                img_give: img#}
+    {#            },#}
+    {#            success: function (response) {#}
+    {#                alert(response['msg'])#}
+    {##}
+    {#            }#}
+    {#        });#}
+    {# } #}
+    {##}
 </script>
 </body>
 </html>
