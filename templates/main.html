@@ -156,10 +156,9 @@
         </div>
     </div>
 
-    <!-- 데이터 추가하기 modal -->
+    <!-- asmr 추가하기 modal -->
     <div>
-{#        <a href="#" data-toggle="modal" data-target="#myModal">추가하기</a>#}
-        <button id="open_modal" type="button" data-toggle="modal" data-target="#myModal">모달 창 열기</button>
+        <button id="open_modal" type="button" data-toggle="modal" data-target="#myModal">추가하기</button>
         <div class="modal fade" id="myModal" data-backdrop="static" data-keyboard="false">
             <div class="modal-dialog modal-l modal-dialog-centered">
                 <div class="modal-content">
@@ -308,32 +307,6 @@
             }
         });
     });
-
-
-
-
-</script>
-<script>
-    {#function save_asmr() {#}
-    {#    let title = $('#title').val()#}
-    {#    let link = $('#link').val()#}
-    {#    let img = $('#image').val()#}
-    {##}
-    {#    $.ajax({#}
-    {#            type: "POST",#}
-    {#            url: "/saveAsmr",#}
-    {#            data: {#}
-    {#                title_give: title,#}
-    {#                link_give: link,#}
-    {#                img_give: img#}
-    {#            },#}
-    {#            success: function (response) {#}
-    {#                alert(response['msg'])#}
-    {##}
-    {#            }#}
-    {#        });#}
-    {# } #}
-    {##}
 </script>
 </body>
 </html>

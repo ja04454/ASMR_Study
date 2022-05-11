@@ -142,7 +142,6 @@ def search():
 
 @app.route('/saveAsmr', methods=['POST'])
 def saveAsmr():
-    print('save')
     title_receive = request.form['title_give']
     link_receive = request.form['link_give']
     img_receive = request.form['img_give']
@@ -153,7 +152,6 @@ def saveAsmr():
         'img': img_receive
     }
     db.asmrs.insert_one(doc)
-    print('저장 완료')
 
     return jsonify({'result': 'success', 'msg': '저장 완료'})
 
