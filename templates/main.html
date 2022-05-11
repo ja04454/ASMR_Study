@@ -52,6 +52,10 @@
         */
     </script>
     <script>
+        $(document).ready(function () {
+            showStar();
+        });
+
         function search() {
             let word = $("#input-word").val()
 
@@ -63,6 +67,50 @@
             }
 
         }
+
+        function deleteStar(id,username){
+            $.ajax({
+                type:'PUT',
+                url :"/deleteStar",
+                data:{id:id,
+                    username:username
+                },
+                success : function (response){
+                    console.log(response)
+                    window.location.reload()
+                }
+
+            })
+        }
+
+        //이미 즐겨찾기 되어있는 곳에는 즐찾 버튼이 뜨지 않기
+        function showStar(){
+            let temp = {{ users_star | tojson }}
+            for(let i=0; i<temp.length; i++){
+                let idName = "btn"+temp[i]
+                $('#'+idName).css({"display":"none"})
+            }
+
+            console.log(temp)
+        }
+
+        function addStar(id,username){
+            let idName = "btn"+id
+            $('#'+idName).css({"display":"none"})
+            $.ajax({
+                type:'PUT',
+                url :"/addStar",
+                data:{id:id,
+                    username:username
+                },
+                success : function (response){
+                    console.log(response)
+                    window.location.reload()
+                }
+
+            })
+        }
+
         function logout() {
             $.removeCookie('mytoken', {path: '/main'});
             alert('로그아웃')
@@ -117,7 +165,9 @@
                 <img src="{{ asmr.img }}" class="card-img-top" alt="{{ asmr.link }}" onclick="location.href='{{ asmr.link }}';">
                 <div class="card-body">
                     <p class="card-text common-post-text common-text-elli">{{ asmr.title }}</p>
-                    <p>시청자 수: <span class="viewers">{{ asmr.viewers }}</span></p>
+                    <p>시청자 수: <span class="viewers">{{ asmr.viewers }}</span>
+                        <button id="btn{{ asmr.id }}" class="starBtn" onclick="addStar({{ asmr.id }},'{{ username }}')">즐찾</button>
+                    </p>
                 </div>
 
                 <div class="common-bookmark" id="star_${asmr.id}">
@@ -139,18 +189,24 @@
     </div>
     <div id="star_content" class="d-flex flex-row flex-nowrap row row-cols-auto w-75 text-white m-auto common-over-hide">
         <!-- jinja2를 사용해 Server에서 처리되는 구문들 -->
-        {% if stars %}
-        {% for star in stars %}
-        <div class="col">
-            <div class="card common-bg-dark common-border-dark my-2" style="width: 18rem;">
-                <img src="{{ star.img }}" class="card-img-top" alt="{{ star.link }}" onclick="location.href='{{ star.link }}';">
-                <div class="card-body">
-                    <p class="card-text common-post-text common-text-elli">{{ star.title }}</p>
-                    <p>시청자 수: <span class="viewers">{{ star.viewers }}</span></p>
-                </div>
-            </div>
-        </div>
-        {% endfor %}
+        {% if lists %}
+            {% for list in lists %}
+                {% for li in list %}
+                    <div class="col">
+                        <div class="card common-bg-dark common-border-dark my-2" style="width: 18rem;">
+                            <img src="{{ li.img }}" class="card-img-top" alt="{{ li.link }}"
+                                 onclick="location.href='{{ li.link }}';">
+                            <div class="card-body">
+                                <p class="card-text common-post-text common-text-elli">{{ li.title }}</p>
+                                <p>시청자 수: <span class="viewers">{{ li.viewers }}</span>
+                                    <button class="starBtn" onclick="deleteStar({{ li.id }},'{{ username }}')">즐겨찾기 해제
+                                    </button>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% endfor %}
         {% else %}
         <h2>조회된 데이터가 없습니다.</h2>
         {% endif %}

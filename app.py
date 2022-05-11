@@ -15,6 +15,9 @@ client = MongoClient('mongodb+srv://test:sparta@cluster0.2rz7w.mongodb.net/Clust
                      tlsCAFile=certifi.where())
 db = client.ASMR_Study
 
+clients = MongoClient('mongodb+srv://test:sparta@cluster0.epbyp.mongodb.net/Cluster0?retryWrites=true&w=majority',tlsCAFile=certifi.where())
+dbWook = clients.ASMR_Study
+
 app = Flask(__name__)
 
 SECRET_KEY = 'SPARTA'
@@ -40,15 +43,66 @@ def home():
 
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
         user_info = db.user.find_one({"username": payload["id"]})
+
+
+        name = "test02"
+        users = list(dbWook.users.find({"username": name}))
+        users_star = users[0]['star']
+        print("test02: ", users)
+        print("star: ", users_star)
+
+        star_arr = []
+
+        for x in users_star:
+            # print("x:", x)
+            temp = list(dbWook.asmr.find({"id": x}))
+            star_arr.append(temp)
+            # print(temp)
+            # print(star_arr)
+        print(asmr_list)
+        print(users_star)
+
+
+        eqStar = []
+        for x in users_star:
+            for y in asmr_list:
+                if x==y:
+                    eqStar.append(x)
+
         # Jinja2 방식으로 SSR(Server side rendering)를 사용해 main.html 페이지를 렌더링
         # 렌더링 시 asmrs라는 이름으로 가져온 asmr_list 데이터를 보내줌
-        return render_template('main.html', user_info=user_info, asmrs=asmr_list)
+        return render_template('main.html', user_info=user_info, asmrs=asmr_list, lists=star_arr, username=name, users_star=users_star)
 
 
     except jwt.ExpiredSignatureError:
         return redirect(url_for("login", msg="로그인 시간이 만료되었습니다."))
     except jwt.exceptions.DecodeError:
         return redirect(url_for("login", msg="로그인 정보가 존재하지 않습니다."))
+
+
+#즐찾삭제
+@app.route('/deleteStar', methods=['PUT'])
+def deleteStar():
+    id = request.form['id']
+    username = request.form['username']
+    print(id)
+    print(username)
+
+    dbWook.users.update_one({'username': username}, {'$pull': {'star': id}})
+
+    return jsonify({'id': id , 'username':username})
+
+#즐찾추가
+@app.route('/addStar', methods=['PUT'])
+def addStar():
+    id = request.form['id']
+    username = request.form['username']
+    print(id)
+    print(username)
+
+    dbWook.users.update_one({'username':username},{'$push':{'star':{'$each':[id],'$position':0}}})
+
+    return jsonify({'id': id , 'username':username})
 
 
 @app.route('/sign_in', methods=['POST'])
@@ -91,6 +145,7 @@ def check_dup():
     username_receive = request.form['username_give']
     exists = bool(db.user.find_one({"username": username_receive}))
     return jsonify({'result': 'success', 'exists': exists})
+
 
 @app.route("/search", methods=["GET"])
 def search():
