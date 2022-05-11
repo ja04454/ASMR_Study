@@ -105,13 +105,14 @@
         </div>
     </div>
 
-    <div class="row w-75 text-white m-auto">
+    <div class="w-75 text-white m-auto">
         <h2>Hot list</h2>
-
+    </div>
+    <div id="asmr_content" class="d-flex flex-row flex-nowrap row row-cols-auto w-75 text-white m-auto common-over-hide">
         <!-- jinja2를 사용해 Server에서 처리되는 구문들 -->
         {% if asmrs %}
         {% for asmr in asmrs %}
-        <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
+        <div class="col">
             <div class="card common-bg-dark common-border-dark my-2" style="width: 18rem;">
                 <img src="{{ asmr.img }}" class="card-img-top" alt="{{ asmr.link }}" onclick="location.href='{{ asmr.link }}';">
                 <div class="card-body">
@@ -121,8 +122,43 @@
             </div>
         </div>
         {% endfor %}
+        {% else %}
+        <h2>조회된 데이터가 없습니다.</h2>
+        {% endif %}
+    </div>
+
+    <div class="w-75 text-white m-auto mt-5">
+        <h2>즐겨찾기 list</h2>
+    </div>
+    <div id="star_content" class="d-flex flex-row flex-nowrap row row-cols-auto w-75 text-white m-auto common-over-hide">
+        <!-- jinja2를 사용해 Server에서 처리되는 구문들 -->
+        {% if stars %}
+        {% for star in stars %}
+        <div class="col">
+            <div class="card common-bg-dark common-border-dark my-2" style="width: 18rem;">
+                <img src="{{ star.img }}" class="card-img-top" alt="{{ star.link }}" onclick="location.href='{{ star.link }}';">
+                <div class="card-body">
+                    <p class="card-text common-post-text common-text-elli">{{ star.title }}</p>
+                    <p>시청자 수: <span class="viewers">{{ star.viewers }}</span></p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        {% else %}
+        <h2>조회된 데이터가 없습니다.</h2>
         {% endif %}
     </div>
 </div>
+<script>
+    $("#asmr_content, #star_content").on('mousewheel',function(e){
+        var wheelDelta = e.originalEvent.wheelDelta;
+        if(wheelDelta > 0){
+            $(this).stop().animate({scrollLeft: -1000 + $(this).scrollLeft()}, 100);
+        }else{
+            $(this).stop().animate({scrollLeft: +1000 + $(this).scrollLeft()}, 100);
+        }
+        return false;
+    });
+</script>
 </body>
 </html>

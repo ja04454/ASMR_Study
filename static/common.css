@@ -50,3 +50,7 @@
 .common-text-elli{
     text-overflow: ellipsis;
 }
+
+.common-over-hide{
+    overflow:hidden;
+}
