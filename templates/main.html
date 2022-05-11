@@ -10,7 +10,8 @@
           crossorigin="anonymous">
 
     <!--    Custom css 추가-->
-    <link rel="stylesheet" href="../static/main.css">
+    <link href="static/common.css" rel="stylesheet">
+    <link href="static/main.css" rel="stylesheet" >
 
     <!--jquery cdn추가-->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -66,6 +67,7 @@
             }
 
         }
+
         function deleteStar(id,username){
             $.ajax({
                 type:'PUT',
@@ -109,54 +111,142 @@
             })
         }
 
+        function logout() {
+            $.removeCookie('mytoken', {path: '/main'});
+            alert('로그아웃')
+            window.location.href = '/';
+        }
     </script>
 </head>
-<body>
-<header>
-    <div class="search">
-        <input id="input-word" type="text"><button onclick="search()">검색</button>
+
+<body style="background-color: #303030">
+<nav class="navbar navbar-expand-lg navbar-dark common-bg-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/main">
+            <img src="static/logo2.svg" alt="" width="150" class="d-inline-block align-text-top">
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse text-white" id="navbarNavDropdown">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="/main">메인</a>
+                </li>
+            </ul>
+        </div>
+        <form class="d-flex">
+            <a class="btn common-btn-grayblue" onclick="logout()">로그아웃</a>
+        </form>
     </div>
+</nav>
 
-</header>
-<section class="section">
-
-</section>
-<section class="section">
-    <div class="container">
-        <h2 class="title">Hot list</h2>
-        <div class="hotList">
-            <!-- jinja2를 사용해 Server에서 처리되는 구문들 -->
-            {% if asmrs %}
-            {% for asmr in asmrs %}
-            <div class="col">
-                    <img src="{{ asmr.img }}" width="360" alt="{{ asmr.link }}" onclick="location.href='{{ asmr.link }}';">
-                <p>{{ asmr.title }}</p>
-                <p>시청자 수: <span class="viewers">{{ asmr.viewers }}</span>
-                    <button id="btn{{ asmr.id }}" class="starBtn" onclick="addStar({{ asmr.id }},'{{ username }}')">즐찾</button>
-                </p>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-4 m-auto my-4">
+            <div class="input-group">
+                <input id="input-word" type="search" placeholder="원하는 ASMR 영상을 검색하세요" aria-label="Search" class="form-control" style="max-width: 800px;" />
+                <div class="input-group-btn">
+                    <button class="btn common-btn-grayblue" onclick="search()">검색</button>
+                </div>
             </div>
-            {% endfor %}
-            {% endif %}
         </div>
     </div>
-</section>
-<section class="section">
-    <div class="container">
-        <h2 clas="title">즐겨찾기</h2>
-        <div class="hotList">
-            {% for list in lists %}
-                {% for li in list %}
-                    <div class="col">
-                        <img src="{{ li.img }}" width="360" alt="{{ li.link }}" onclick="location.href='{{ li.link }}';">
-                        <p>{{ li.title }}</p>
-                        <p>시청자 수: <span class="viewers">{{ li.viewers }}</span>
-                            <button class="starBtn" onclick="deleteStar({{ li.id }},'{{ username }}')">즐겨찾기 해제</button>
-                        </p>
+
+{#</section>#}
+{#<section class="section">#}
+{#    <div class="container">#}
+{#        <h2 class="title">Hot list</h2>#}
+{#        <div class="hotList">#}
+{#            <!-- jinja2를 사용해 Server에서 처리되는 구문들 -->#}
+{#            {% if asmrs %}#}
+{#            {% for asmr in asmrs %}#}
+{#            <div class="col">#}
+{#                    <img src="{{ asmr.img }}" width="360" alt="{{ asmr.link }}" onclick="location.href='{{ asmr.link }}';">#}
+{#                <p>{{ asmr.title }}</p>#}
+{#                <p>시청자 수: <span class="viewers">{{ asmr.viewers }}</span>#}
+{#                    <button id="btn{{ asmr.id }}" class="starBtn" onclick="addStar({{ asmr.id }},'{{ username }}')">즐찾</button>#}
+{#                </p>#}
+    <div class="w-75 text-white m-auto">
+        <h2>Hot list</h2>
+    </div>
+    <div id="asmr_content" class="d-flex flex-row flex-nowrap row row-cols-auto w-75 text-white m-auto common-over-hide">
+        <!-- jinja2를 사용해 Server에서 처리되는 구문들 -->
+        {% if asmrs %}
+        {% for asmr in asmrs %}
+        <div class="col">
+            <div class="card common-bg-dark common-border-dark my-2" style="width: 18rem;">
+                <img src="{{ asmr.img }}" class="card-img-top" alt="{{ asmr.link }}" onclick="location.href='{{ asmr.link }}';">
+                <div class="card-body">
+                    <p class="card-text common-post-text common-text-elli">{{ asmr.title }}</p>
+                    <p>시청자 수: <span class="viewers">{{ asmr.viewers }}</span>
+                        <button id="btn{{ asmr.id }}" class="starBtn" onclick="addStar({{ asmr.id }},'{{ username }}')">즐찾</button>
+                    </p>
+                </div>
+
+            </div>
+        </div>
+        {% endfor %}
+        {% else %}
+        <h2>조회된 데이터가 없습니다.</h2>
+        {% endif %}
+    </div>
+
+
+{#<section class="section">#}
+{#    <div class="container">#}
+{#        <h2 clas="title">즐겨찾기</h2>#}
+{#        <div class="hotList">#}
+{#            {% for list in lists %}#}
+{#                {% for li in list %}#}
+{#                    <div class="col">#}
+{#                        <img src="{{ li.img }}" width="360" alt="{{ li.link }}" onclick="location.href='{{ li.link }}';">#}
+{#                        <p>{{ li.title }}</p>#}
+{#                        <p>시청자 수: <span class="viewers">{{ li.viewers }}</span>#}
+{#                            <button class="starBtn" onclick="deleteStar({{ li.id }},'{{ username }}')">즐겨찾기 해제</button>#}
+{#                        </p>#}
+{#                    </div>#}
+{#                {% endfor %}#}
+{#            {% endfor %}#}
+{#        </div>#}
+{#    </div>#}
+{#</section>#}
+
+
+    <div class="w-75 text-white m-auto mt-5">
+        <h2>즐겨찾기 list</h2>
+    </div>
+    <div id="star_content" class="d-flex flex-row flex-nowrap row row-cols-auto w-75 text-white m-auto common-over-hide">
+        <!-- jinja2를 사용해 Server에서 처리되는 구문들 -->
+        {% for list in lists %}
+            {% for li in list %}
+                <div class="col">
+                    <div class="card common-bg-dark common-border-dark my-2" style="width: 18rem;">
+                        <img src="{{ li.img }}" class="card-img-top" alt="{{ li.link }}"
+                             onclick="location.href='{{ li.link }}';">
+                        <div class="card-body">
+                            <p class="card-text common-post-text common-text-elli">{{ li.title }}</p>
+                            <p>시청자 수: <span class="viewers">{{ li.viewers }}</span>
+                                <button class="starBtn" onclick="deleteStar({{ li.id }},'{{ username }}')">즐겨찾기 해제
+                                </button>
+                            </p>
+                        </div>
                     </div>
-                {% endfor %}
+                </div>
             {% endfor %}
-        </div>
+        {% endfor %}
     </div>
-</section>
+</div>
+<script>
+    $("#asmr_content, #star_content").on('mousewheel',function(e){
+        var wheelDelta = e.originalEvent.wheelDelta;
+        if(wheelDelta > 0){
+            $(this).stop().animate({scrollLeft: -1000 + $(this).scrollLeft()}, 100);
+        }else{
+            $(this).stop().animate({scrollLeft: +1000 + $(this).scrollLeft()}, 100);
+        }
+        return false;
+    });
+</script>
 </body>
 </html>

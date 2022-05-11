@@ -1,0 +1,44 @@
+diff a/templates/main.html b/templates/main.html	(rejected hunks)
+@@ -65,18 +65,35 @@
+         <div class="hotList">
+             {% if asmrs %}
+             {% for asmr in asmrs %}
+-            <div class="col" onclick="location.href='{{ asmr.link }}';">
+-                    <img src="{{ asmr.img }}" width="360" alt="{{ asmr.link }}">
+-                <p>{{ asmr.title }}</p>
+-                <p>시청자 수: <span class="viewers"></span></p>
+-            </div>
++                <div class="col" onclick="location.href='{{ asmr.link }}';">
++                        <img src="{{ asmr.img }}" width="360" alt="{{ asmr.link }}">
++                    <p>{{ asmr.title }}</p>
++                    <p>시청자 수: <span class="viewers"></span></p>
++
++                </div>
++                <button class="starBtn" onclick="staradd()">즐찾</button>
+             {% endfor %}
+             {% endif %}
++
+         </div>
++
+     </div>
+ </section>
+ <section class="section">
+-
++    <div class="container">
++        <h2 clas="title">즐겨찾기</h2>
++        <div class="hotList">
++            {% for list in lists %}
++                {% for li in list %}
++                    <div class="col" onclick="location.href='{{ li.link }}';">
++                            <img src="{{ li.img }}" width="360" alt="{{ li.link }}">
++                        <p>{{ li.title }}</p>
++                        <p>시청자 수: <span class="viewers"></span></p>
++                    </div>
++                {% endfor %}
++            {% endfor %}
++        </div>
++    </div>
+ </section>
+ </body>
+ </html>
+\ No newline at end of file

@@ -44,7 +44,7 @@ if data.ok:
                 'title': title,
                 'img': img,
                 'link': link,
-                'viewers': ''
+                'viewers': '100'
             }
             #만들어진 데이터를 DB에 저장
             db.asmrs.insert_one(doc)
