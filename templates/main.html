@@ -84,11 +84,14 @@
         }
 
         //이미 즐겨찾기 되어있는 곳에는 즐찾 버튼이 뜨지 않기
+        //안보이는 대신 예쁜 리본을 달아주기로 함(윤교)
         function showStar(){
             let temp = {{ users_star | tojson }}
             for(let i=0; i<temp.length; i++){
-                let idName = "btn"+temp[i]
-                $('#'+idName).css({"display":"none"})
+                let svgId = "svg"+temp[i];
+                let btnId = "btn"+temp[i];
+                $('#'+svgId).css({"fill":"#FCC400"});
+                $('#'+btnId).attr("onclick", "deleteStar("+temp[i]+",'{{ username }}')");
             }
 
             console.log(temp)
@@ -166,12 +169,11 @@
                 <div class="card-body">
                     <p class="card-text common-post-text common-text-elli">{{ asmr.title }}</p>
                     <p>시청자 수: <span class="viewers">{{ asmr.viewers }}</span>
-                        <button id="btn{{ asmr.id }}" class="starBtn" onclick="addStar({{ asmr.id }},'{{ username }}')">즐찾</button>
                     </p>
                 </div>
 
-                <div class="common-bookmark" id="star_${asmr.id}">
-                    <svg id="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" style="">
+                <div class="common-bookmark" id="btn{{ asmr.id }}" onclick="addStar({{ asmr.id }},'{{ username }}')">
+                    <svg id="svg{{ asmr.id }}"  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" style="">
                         <g id="icomoon-ignore"></g>
                         <path d="M96 0v512l160-160 160 160v-512z"></path>
                     </svg>
@@ -199,9 +201,14 @@
                             <div class="card-body">
                                 <p class="card-text common-post-text common-text-elli">{{ li.title }}</p>
                                 <p>시청자 수: <span class="viewers">{{ li.viewers }}</span>
-                                    <button class="starBtn" onclick="deleteStar({{ li.id }},'{{ username }}')">즐겨찾기 해제
-                                    </button>
                                 </p>
+                            </div>
+
+                            <div class="common-bookmark" onclick="deleteStar({{ li.id }},'{{ username }}')">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" style="fill:#FCC400">
+                                    <g id="icomoon-ignore"></g>
+                                    <path d="M96 0v512l160-160 160 160v-512z"></path>
+                                </svg>
                             </div>
                         </div>
                     </div>

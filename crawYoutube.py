@@ -38,9 +38,10 @@ if data.ok:
             img = val['videoRenderer']['thumbnail']['thumbnails'][0]['url']
             title = val['videoRenderer']['title']['runs'][0]['text']
             link = "https://www.youtube.com" + val['videoRenderer']['navigationEndpoint']['commandMetadata']['webCommandMetadata']['url']
+
             #DB 저장을 위해 사전 구조를 만듬
             doc = {
-                'id':idx,
+                'id': str(idx),
                 'title': title,
                 'img': img,
                 'link': link,

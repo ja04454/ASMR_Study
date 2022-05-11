@@ -15,9 +15,6 @@ client = MongoClient('mongodb+srv://test:sparta@cluster0.2rz7w.mongodb.net/Clust
                      tlsCAFile=certifi.where())
 db = client.ASMR_Study
 
-clients = MongoClient('mongodb+srv://test:sparta@cluster0.epbyp.mongodb.net/Cluster0?retryWrites=true&w=majority',tlsCAFile=certifi.where())
-dbWook = clients.ASMR_Study
-
 app = Flask(__name__)
 
 SECRET_KEY = 'SPARTA'
@@ -43,24 +40,13 @@ def home():
 
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
         user_info = db.user.find_one({"username": payload["id"]})
-
-
-        name = "test02"
-        users = list(dbWook.users.find({"username": name}))
-        users_star = users[0]['star']
-        print("test02: ", users)
-        print("star: ", users_star)
+        users_star = user_info['star']
 
         star_arr = []
 
         for x in users_star:
-            # print("x:", x)
-            temp = list(dbWook.asmr.find({"id": x}))
+            temp = list(db.asmrs.find({"id": x}))
             star_arr.append(temp)
-            # print(temp)
-            # print(star_arr)
-        print(asmr_list)
-        print(users_star)
 
 
         eqStar = []
@@ -71,7 +57,7 @@ def home():
 
         # Jinja2 방식으로 SSR(Server side rendering)를 사용해 main.html 페이지를 렌더링
         # 렌더링 시 asmrs라는 이름으로 가져온 asmr_list 데이터를 보내줌
-        return render_template('main.html', user_info=user_info, asmrs=asmr_list, lists=star_arr, username=name, users_star=users_star)
+        return render_template('main.html', user_info=user_info, asmrs=asmr_list, lists=star_arr, username=payload["id"], users_star=users_star)
 
 
     except jwt.ExpiredSignatureError:
@@ -85,10 +71,8 @@ def home():
 def deleteStar():
     id = request.form['id']
     username = request.form['username']
-    print(id)
-    print(username)
 
-    dbWook.users.update_one({'username': username}, {'$pull': {'star': id}})
+    db.user.update_one({'username': username}, {'$pull': {'star': id}})
 
     return jsonify({'id': id , 'username':username})
 
@@ -97,10 +81,8 @@ def deleteStar():
 def addStar():
     id = request.form['id']
     username = request.form['username']
-    print(id)
-    print(username)
 
-    dbWook.users.update_one({'username':username},{'$push':{'star':{'$each':[id],'$position':0}}})
+    db.user.update_one({'username':username},{'$push':{'star':{'$each':[id],'$position':0}}})
 
     return jsonify({'id': id , 'username':username})
 
@@ -134,7 +116,8 @@ def sign_up():
     password_hash = hashlib.sha256(password_receive.encode('utf-8')).hexdigest()
     doc = {
         "username": username_receive,
-        "password": password_hash
+        "password": password_hash,
+        "star":[]
     }
     db.user.insert_one(doc)
     return jsonify({'result': 'success'})
