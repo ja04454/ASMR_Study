@@ -92,15 +92,6 @@ def check_dup():
     exists = bool(db.user.find_one({"username": username_receive}))
     return jsonify({'result': 'success', 'exists': exists})
 
-
-@app.route('/')
-def index():
-    # 현재 index 페이지가 없기 때문에 main 함수로 요청을 돌려버림
-    return redirect(url_for('main'))
-    # return render_template('index.html')
-
-
-
 @app.route("/search", methods=["GET"])
 def search():
 

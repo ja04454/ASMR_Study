@@ -1,0 +1,52 @@
+
+.common-border-top{
+    border-top: 0.5rem solid;
+    border-top-color: #303030;
+
+}
+.common-border-dark{
+    border: 0.5rem solid;
+    border-color: #222222;
+
+}
+
+.common-btn-grayblue{
+    color: #fff;
+    background-color: #405B81;
+    border-color: #405B81;
+}
+
+.common-footer{
+    max-width: 1000px;
+}
+
+.common-text-lightgray{
+    color: #757575;
+}
+
+.common-bg-dark{
+    background-color: #222222!important;
+}
+
+.header-image {
+    height: 700px;
+    background-image: url("http://cdn.edujin.co.kr/news/photo/202102/35064_66361_141.jpg");
+    background-position: center center;
+    background-repeat: repeat;
+    background-attachment: fixed;
+    background-size: cover;
+}
+
+.common-post-text{
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 3; /* 라인수 */
+    -webkit-box-orient: vertical;
+    word-wrap:break-word;
+    line-height: 1.2em;
+    height: 3.6em;
+}
+
+.common-text-elli{
+    text-overflow: ellipsis;
+}
