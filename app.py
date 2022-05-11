@@ -140,6 +140,23 @@ def search():
 
     return render_template('search.html', find_asmr=find_list)
 
+@app.route('/saveAsmr', methods=['POST'])
+def saveAsmr():
+    print('save')
+    title_receive = request.form['title_give']
+    link_receive = request.form['link_give']
+    img_receive = request.form['img_give']
+
+    doc = {
+        'title': title_receive,
+        'link': link_receive,
+        'img': img_receive
+    }
+    db.asmrs.insert_one(doc)
+    print('저장 완료')
+
+    return jsonify({'result': 'success', 'msg': '저장 완료'})
+
 
 # 20220509 김윤교 작업본, Client단에서 시청자 수를 가져오기 위해 만든 크롤링
 # 이벤트가 클라이언트 기준으로 실행되기 때문에 과부화 우려가 있음
