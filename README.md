@@ -1,32 +1,40 @@
 # ASMR_Study
-### 2조 미니 프로젝트  
-> 공부할 때 듣기 좋은 ASMR 을 소개합니다. 
->기간 : 2022. 05.09 ~ 05.12
+## 📺1. 프로젝트 소개 - e반 2조 미니 프로젝트
+<p align="center">
+  <img width="95%" alt="intro" src="https://user-images.githubusercontent.com/33679560/168001317-55a66d7a-6aa6-4782-b250-16cface4048c.JPG">  
+</p>
 
+> 공부할 때 듣기 좋은 ASMR 을 소개합니다.  
+<br/>
 
-## 팀원소개 
-* 김윤교 :
-* 남신욱 :
-* 신여진 : 
-* 정지은 :
+## 👨‍👩‍👧2. 제작기간 및 팀원소개
+📅 2022-05-09 ~ 2022-05-12
+* [김윤교](https://github.com/sugarghost) : 
+* [남신욱](https://github.com/tlsdnr1135) : 
+* [신여진](https://github.com/ja04454) : 
+* [정지은](https://github.com/stopss) : 검색 페이지, ASMR 추가하기  
+<br/>
 
+## 🛠3. 사용 기술
+* 서버 : AWS EC2
+* 언어 : Python3, HTML, CSS, JavaScript
+* 프레임워크 / 라이브러리 : Flask, Jquery, Bootstrap
+* 협업툴 : Git, Github
+* 데이터베이스 : MongoDB  
+<br/>  
 
-## 웹사이트 링크
+## 🖥4. 웹사이트 링크
+[링크]()  
+<br/>
 
+## 🎬5. 시연영상
+[링크](www.youtube.com)  
+<br/>
 
-## 시연영상 링크
-
-영상 주소 : 
-
-
-## 핵심기능
+## 📌6. 핵심기능
+* 로그인, 회원가입
+  * JWT를 이용한 로그인, 회원가입 구현
+* 
  
 
 
-## 사용기술
-* PyJWT
-* Jinja2
-* Flask
-* Bootstrap
-* bs4
-* mongoDB
