@@ -41,11 +41,10 @@ if data.ok:
 
             #DB 저장을 위해 사전 구조를 만듬
             doc = {
-                'id': str(idx),
                 'title': title,
                 'img': img,
                 'link': link,
-                'viewers': '100'
+                'viewers': ''
             }
             #만들어진 데이터를 DB에 저장
             db.asmrs.insert_one(doc)

@@ -89,7 +89,7 @@
                 let svgId = "svg"+temp[i];
                 let btnId = "btn"+temp[i];
                 $('#'+svgId).css({"fill":"#FCC400"});
-                $('#'+btnId).attr("onclick", "deleteStar("+temp[i]+")");
+                $('#'+btnId).attr("onclick", "deleteStar('"+temp[i]+"')");
             }
 
             console.log(temp)
@@ -219,8 +219,8 @@
                     </p>
                 </div>
 
-                <div class="common-bookmark" id="btn{{ asmr.id }}" onclick="addStar({{ asmr.id }})">
-                    <svg id="svg{{ asmr.id }}"  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" style="">
+                <div class="common-bookmark" id="btn{{ asmr._id }}" onclick="addStar('{{ asmr._id }}')">
+                    <svg id="svg{{ asmr._id }}"  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" style="">
                         <g id="icomoon-ignore"></g>
                         <path d="M96 0v512l160-160 160 160v-512z"></path>
                     </svg>
@@ -251,7 +251,7 @@
                                 </p>
                             </div>
 
-                            <div class="common-bookmark" onclick="deleteStar({{ li.id }})">
+                            <div class="common-bookmark" onclick="deleteStar('{{ li._id }}')">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" style="fill:#FCC400">
                                     <g id="icomoon-ignore"></g>
                                     <path d="M96 0v512l160-160 160 160v-512z"></path>

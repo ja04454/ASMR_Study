@@ -7,6 +7,7 @@ import certifi
 import re
 import jwt
 import hashlib
+from bson.objectid import ObjectId
 
 from datetime import datetime, timedelta
 from apscheduler.schedulers.background import BackgroundScheduler
@@ -59,7 +60,7 @@ def home():
         star_arr = []
 
         for x in users_star:
-            temp = list(db.asmrs.find({"id": x}))
+            temp = list(db.asmrs.find({"_id": ObjectId(x)}))
             star_arr.append(temp)
 
 
