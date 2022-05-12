@@ -282,10 +282,16 @@
                 }
             });
         }
+        function enterlogin() {
+            var keyCode = window.event.keyCode;
+            if(keyCode== 13){
+                sign_in();
+            }
+        }
     </script>
 
 </head>
-<body>
+<body onkeydown="enterlogin()">
 <div>
     <section class="hero is-primary is-fullheight header-image">
         <!-- Hero header: will stick at the top -->
@@ -304,8 +310,8 @@
                             <div class="box" style="max-width: 480px;margin:auto">
                                 <article class="media">
                                     <div class="media-content">
-                                        <div class="content">
-                                            <div class="field has-addons">
+                                        <div class="content" id="login-form">
+                                            <div class="field has-addons" >
                                                 <div class="control has-icons-left" style="width:100%">
                                                     <input id="input-username" class="input" type="text"
                                                            placeholder="아이디">
