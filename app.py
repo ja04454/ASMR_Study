@@ -57,18 +57,11 @@ def home():
         user_info = db.user.find_one({"username": payload["id"]})
         users_star = user_info['star']
 
+        #유저의 즐겨찾기에 있는 즐겨찾기들의 상세 정보를 불러온다.
         star_arr = []
-
         for x in users_star:
             temp = list(db.asmrs.find({"_id": ObjectId(x)}))
             star_arr.append(temp)
-
-
-        eqStar = []
-        for x in users_star:
-            for y in asmr_list:
-                if x==y:
-                    eqStar.append(x)
 
         # Jinja2 방식으로 SSR(Server side rendering)를 사용해 main.html 페이지를 렌더링
         # 렌더링 시 asmrs라는 이름으로 가져온 asmr_list 데이터를 보내줌

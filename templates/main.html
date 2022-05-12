@@ -52,6 +52,7 @@
         */
     </script>
     <script>
+        //북마크를 처음 보여준다.
         $(document).ready(function () {
             showStar();
         });
@@ -67,6 +68,7 @@
 
         }
 
+        //즐겨찾기 지우기
         function deleteStar(id){
             $.ajax({
                 type:'PUT',
@@ -95,9 +97,8 @@
             console.log(temp)
         }
 
+        //즐겨찾기 추가
         function addStar(id){
-            let idName = "btn"+id
-            $('#'+idName).css({"display":"none"})
             $.ajax({
                 type:'PUT',
                 url :"/addStar",
@@ -107,7 +108,6 @@
                     console.log(response)
                     window.location.reload()
                 }
-
             })
         }
 
@@ -156,7 +156,6 @@
     </div>
 
     <!-- asmr 추가하기 modal -->
-<<<<<<< Updated upstream
     <div class="row">
         <div class="col m-auto text-center">
             <button id="open_modal" type="button" class="btn common-btn-grayblue" data-toggle="modal" data-target="#myModal">ASMR 추가하기</button>
