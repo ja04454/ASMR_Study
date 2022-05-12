@@ -29,7 +29,7 @@
 
 ## 🎬5. 시연영상
 <p align="center">
-  <img width="95%" alt="intro" src="https://user-images.githubusercontent.com/33679560/168020395-c2bddcab-acbd-4825-a9db-ca966643ed33.gif">  
+  <img width="95%" alt="intro" src="https://user-images.githubusercontent.com/33679560/168020901-9f541c79-607a-498f-a224-afa06e9faf32.gif">  
 </p> 
 <br/>
 
