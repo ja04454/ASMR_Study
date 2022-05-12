@@ -54,6 +54,10 @@ def home():
         # DB에서 저장된 asmrs 리스트를 가져다가 뽑아옴
         asmr_list = list(db.asmrs.find({}))
 
+        for asmr in asmr_list:
+            asmr['link'] = asmr['link'].replace("watch?v=","embed/")
+            print(asmr['link'])
+
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
         user_info = db.user.find_one({"username": payload["id"]})
         users_star = user_info['star']

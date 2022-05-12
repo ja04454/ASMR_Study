@@ -211,7 +211,9 @@
         {% for asmr in asmrs %}
         <div class="col">
             <div class="card common-bg-dark common-border-dark my-2" style="width: 18rem; height: 95%">
-                <img src="{{ asmr.img }}" class="card-img-top" alt="{{ asmr.link }}" onclick="location.href='{{ asmr.link }}';">
+                <iframe width="272px" height="150px"
+                        src="{{ asmr.link }}">
+                </iframe>
                 <div class="card-body">
                     <p class="card-text common-post-text common-text-elli">{{ asmr.title }}</p>
                     <p class="common-viewer-text">시청자 수: {{ asmr.viewers }}
@@ -242,8 +244,9 @@
                 {% for li in list %}
                     <div class="col">
                         <div class="card common-bg-dark common-border-dark my-2" style="width: 18rem; height: 95%">
-                            <img src="{{ li.img }}" class="card-img-top" alt="{{ li.link }}"
-                                 onclick="location.href='{{ li.link }}';">
+                            <a href="{{ li.link }}" target="_blank">
+                                <img src="{{ li.img }}" class="card-img-top" alt="{{ li.link }}">
+                            </a>
                             <div class="card-body">
                                 <p class="card-text common-post-text common-text-elli">{{ li.title }}</p>
                                 <p class="common-viewer-text">시청자 수: {{ li.viewers }}
