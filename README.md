@@ -10,7 +10,7 @@
 ## 👨‍👩‍👧2. 제작기간 및 팀원소개
 📅 2022-05-09 ~ 2022-05-12
 * [김윤교](https://github.com/sugarghost) : 
-* [남신욱](https://github.com/tlsdnr1135) : 
+* [남신욱](https://github.com/tlsdnr1135) : 즐겨찾기 추가,제거
 * [신여진](https://github.com/ja04454) : 
 * [정지은](https://github.com/stopss) : 검색 페이지, ASMR 추가하기  
 <br/>
