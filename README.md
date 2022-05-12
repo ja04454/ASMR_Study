@@ -28,7 +28,7 @@
 <br/>
 
 ## 🎬5. 시연영상
-[https://youtu.be/DAp8p_TUawk](https://youtu.be/DAp8p_TUawk)
+[https://youtu.be/DAp8p_TUawk](https://youtu.be/DAp8p_TUawk)  
 <br/>
 
 ## 📌6. 핵심기능
