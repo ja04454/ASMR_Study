@@ -257,7 +257,7 @@ def getViewers():
                 db.asmrs.update_one({'_id': asmr['_id']}, {"$set": {"viewers": 'Not Streaming'}})
 
 
-scheduler = BackgroundScheduler()
+scheduler = BackgroundScheduler(timezone='Asia/Seoul')
 # 스케쥴러를 이용해 1 시간마다 크롤링(getViewers 함수를 호출)
 scheduler.add_job(func=getViewers, trigger="interval", seconds=3600)
 scheduler.start()
