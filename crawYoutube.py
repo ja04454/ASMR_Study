@@ -7,8 +7,7 @@ import certifi
 
 
 #유튜브 검색 결과에서 영상 목록을 가져와 DB에 저장하기 위한 소스코드
-client = MongoClient('mongodb+srv://test:sparta@cluster0.2rz7w.mongodb.net/Cluster0?retryWrites=true&w=majority',tlsCAFile=certifi.where())
-
+client = MongoClient('mongodb+srv://test:sparta@cluster0.p0pyn.mongodb.net/Cluster0?retryWrites=true&w=majority')
 db = client.ASMR_Study
 
 #requests를 쓰기 위한 header 정보

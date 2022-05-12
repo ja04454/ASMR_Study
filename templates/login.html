@@ -121,9 +121,12 @@
         {% endif %}
 
         function sign_in() {
+            // 로그인
+            // ID와 PW 입력 값 받아오기
             let username = $("#input-username").val()
             let password = $("#input-password").val()
 
+            // ID 부분이 빈 값인지 확인
             if (username == "") {
                 $("#help-id-login").text("아이디를 입력해주세요.")
                 $("#input-username").focus()
@@ -131,7 +134,7 @@
             } else {
                 $("#help-id-login").text("")
             }
-
+            // PW 부분이 빈 값인지 확인
             if (password == "") {
                 $("#help-password-login").text("비밀번호를 입력해주세요.")
                 $("#input-password").focus()
@@ -149,22 +152,26 @@
                 },
                 success: function (response) {
                     if (response['result'] == 'success') {
+                        // 로그인이 정상적으로 되면 토큰 받아온다.
+                        // 토큰-> mytoken이라는 키 값으로 쿠키에 저장
                         $.cookie('mytoken', response['token'], {path: '/'});
                         window.location.replace("/main")
                     } else {
+                        // 로그인 안되면 에러 메시지
                         alert(response['msg'])
                     }
                 }
             });
         }
 
-
+        // 회원가입
         function sign_up() {
             let username = $("#input-username").val()
             let password = $("#input-password").val()
             let password2 = $("#input-password2").val()
             console.log(username, password, password2)
 
+            // 중복검사를 했는지 안했는지
             if ($("#help-id").hasClass("is-danger")) {
                 alert("아이디를 다시 확인해주세요.")
                 return;
@@ -173,11 +180,14 @@
                 return;
             }
 
+            // 빈칸, 규칙, 비밀번호 재입력 부분과 같은지 확인
             if (password == "") {
+                // 빈칸
                 $("#help-password").text("비밀번호를 입력해주세요.").removeClass("is-safe").addClass("is-danger")
                 $("#input-password").focus()
                 return;
             } else if (!is_password(password)) {
+                // 규칙 검사
                 $("#help-password").text("비밀번호의 형식을 확인해주세요. 영문과 숫자 필수 포함, 특수문자(!@#$%^&*) 사용가능 8-20자").removeClass("is-safe").addClass("is-danger")
                 $("#input-password").focus()
                 return
@@ -185,14 +195,17 @@
                 $("#help-password").text("사용할 수 있는 비밀번호입니다.").removeClass("is-danger").addClass("is-success")
             }
             if (password2 == "") {
+                // 빈칸
                 $("#help-password2").text("비밀번호를 입력해주세요.").removeClass("is-safe").addClass("is-danger")
                 $("#input-password2").focus()
                 return;
             } else if (password2 != password) {
+                // 비밀번호 값과 비밀번호 재입력 값이 같지 않다면
                 $("#help-password2").text("비밀번호가 일치하지 않습니다.").removeClass("is-safe").addClass("is-danger")
                 $("#input-password2").focus()
                 return;
             } else {
+                // 비밀번호 값과 비밀번호 재입력 값이 같다면
                 $("#help-password2").text("비밀번호가 일치합니다.").removeClass("is-danger").addClass("is-success")
             }
 
@@ -210,7 +223,7 @@
             });
         }
 
-
+        // 로그인,회원가입 토글
         function toggle_sign_up() {
             $("#sign-up-box").toggleClass("is-hidden")
             $("#div-sign-in-or-up").toggleClass("is-hidden")
@@ -221,23 +234,28 @@
         }
 
         function is_nickname(asValue) {
+            // 정규표현식으로 ID 조건 비교
             var regExp = /^(?=.*[a-zA-Z])[-a-zA-Z0-9_.]{2,10}$/;
             return regExp.test(asValue);
         }
 
         function is_password(asValue) {
+            // 정규표현식으로 PW 조건 비교
             var regExp = /^(?=.*\d)(?=.*[a-zA-Z])[0-9a-zA-Z!@#$%^&*]{8,20}$/;
             return regExp.test(asValue);
         }
 
         function check_dup() {
+            // ID 중복확인
             let username = $("#input-username").val()
             console.log(username)
+            // 유저가 값을 입력하지 않으면
             if (username == "") {
                 $("#help-id").text("아이디를 입력해주세요.").removeClass("is-safe").addClass("is-danger")
                 $("#input-username").focus()
                 return;
             }
+            // ID 규칙에 맞지 않으면
             if (!is_nickname(username)) {
                 $("#help-id").text("아이디의 형식을 확인해주세요. 영문과 숫자, 일부 특수문자(._-) 사용 가능. 2-10자 길이").removeClass("is-safe").addClass("is-danger")
                 $("#input-username").focus()
@@ -251,11 +269,12 @@
                     username_give: username
                 },
                 success: function (response) {
-
+                    // ID가 이미 존재하면
                     if (response["exists"]) {
                         $("#help-id").text("이미 존재하는 아이디입니다.").removeClass("is-safe").addClass("is-danger")
                         $("#input-username").focus()
                     } else {
+                        // 중복 확인 통과
                         $("#help-id").text("사용할 수 있는 아이디입니다.").removeClass("is-danger").addClass("is-success")
                     }
                     $("#help-id").removeClass("is-loading")
