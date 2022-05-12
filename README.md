@@ -24,14 +24,11 @@
 <br/>  
 
 ## 🖥4. 웹사이트 링크
-[링크](http://mileage-milestone.shop/)  
+[http://mileage-milestone.shop/](http://mileage-milestone.shop/)  
 <br/>
 
 ## 🎬5. 시연영상
-<p align="center">
-  <img width="50%" alt="intro" src="https://user-images.githubusercontent.com/33679560/168020901-9f541c79-607a-498f-a224-afa06e9faf32.gif">  
-</p>
-[링크](https://youtu.be/DAp8p_TUawk)
+[https://youtu.be/DAp8p_TUawk](https://youtu.be/DAp8p_TUawk)
 <br/>
 
 ## 📌6. 핵심기능
