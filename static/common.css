@@ -1,4 +1,42 @@
+html, body{
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    font-size: 100%;
+    box-sizing: border-box;
+}
 
+body{
+    font-family: -apple-system,BlinkMacSystemFont,"Malgun Gothic","맑은 고딕",helvetica,arial,"Apple SD Gothic Neo",sans-serif;
+    font-weight: 300; /* 글자 두께 */
+    font-size: 1em;
+    line-height: 1.25; /* 줄 간격 */
+    -webkit-text-size-adjust: 100%;
+    -webkit-font-smoothing: antialiased; /* 글자 부드럽게 */
+    background-size: cover; /* 배경 이미지 기본 크기 */
+    background-repeat: no-repeat; /* 배경 이미지 반복 */
+    background-position: center; /* 배경 이미지 정렬 위치 */
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-attachment: fixed;
+}
+* {
+    font-size: 62.5%; /* 10px */
+}
+
+.em-14{
+    font-size: 14em;
+}
+
+.em-12{
+    font-size: 12em;
+}
+
+.em-10{
+    font-size: 10em;
+}
 .common-border-top{
     border-top: 0.5rem solid;
     border-top-color: #303030;
@@ -15,7 +53,6 @@
     background-color: #405B81;
     border-color: #405B81;
 }
-
 .common-footer{
     max-width: 1000px;
 }
@@ -27,6 +64,9 @@
 .common-bg-dark{
     background-color: #222222!important;
 }
+.common-bg-lightdark{
+    background-color: #303030!important;
+}
 
 .header-image {
     height: 700px;
@@ -36,24 +76,51 @@
     background-attachment: fixed;
     background-size: cover;
 }
+@media (max-width: 992px){
+    .common-nav-hide{
+        display: none;
+    }
+}
 
+@media (min-width: 992px){
+    .common-nav-show{
+        display: none;
+    }
+}
 .common-post-text{
     overflow: hidden;
     display: -webkit-box;
     -webkit-line-clamp: 3; /* 라인수 */
     -webkit-box-orient: vertical;
     word-wrap:break-word;
-    line-height: 1.2em;
-    height: 3.6em;
+    font-size: 10em;
 }
 
+.common-viewer-text{
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 1; /* 라인수 */
+    -webkit-box-orient: vertical;
+    word-wrap:break-word;
+    font-size: 10em;
+}
 .common-text-elli{
     text-overflow: ellipsis;
 }
 
 .common-over-hide{
-    overflow:hidden;
+    overflow:auto;
 }
+/* 스크롤바 커스텀
+ width는 세로 스크롤바 두께,
+ height는 가로 스크롤바 두께 지정
+
+track은 스크롤바 배경색
+thumb는 스크롤바 조정 부분에 색
+ */
+.common-scrollbar::-webkit-scrollbar { height: 10px; }
+.common-scrollbar::-webkit-scrollbar-track { background-color: #b3b3b3; }
+.common-scrollbar::-webkit-scrollbar-thumb { width: 10px; background-color: #405B81; }
 
 .common-bookmark svg {
     position: absolute;

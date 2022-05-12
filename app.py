@@ -22,19 +22,26 @@ SECRET_KEY = 'SPARTA'
 #jwt id 가져오기 모듈화
 def GetJwtId():
     # token_check()
+    #mytoken이라는 이름으로 저장된 사용자의 쿠키 정보를 가져옴
     token_receive = request.cookies.get('mytoken')
+    #jwt 해독 기능을 이용해 가져온 토큰 정보를 암호키와 함께 HS256 방식으로 해석해 저장함
     payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+    #해독 된 사용자 정보에서 id 정보를 꺼내 DB에서 유저 정보 검색 실행
     user_info = db.user.find_one({"username": payload["id"]})
+    #유저의 아이디를 반환함
     return user_info['username']
 
 @app.route('/')
 def intro():
+    #jinja2 방식으로 intro.html 페이지를 서버에서 렌더링 한 뒤 사용자에게 제공
     return render_template('intro.html')
 
 
 @app.route('/login')
 def login():
+    #클라이언트에서 전송된 MultiDict 데이터에서 "msg"키를 가진 데이터의 값을 가져옴
     msg = request.args.get("msg")
+    #렌더링 시 변수를 페이지에서 사용하기 위해 msg 데이터를 담아줌
     return render_template('login.html', msg=msg)
 
 
@@ -136,23 +143,26 @@ def check_dup():
     exists = bool(db.user.find_one({"username": username_receive}))
     return jsonify({'result': 'success', 'exists': exists})
 
-
+# 검색
 @app.route("/search", methods=["GET"])
 def search():
-
     word_receive = request.args['word']
 
-    # db에서 특정 문자 포함($regex), 옵션(대소문자 상관없이)을 줘서 가져옴
+    # db에서 'title'에 검색할 단어가 포함되어 있는 도큐먼트 조회
+    # 조건 - 특정 문자 포함($regex), 대소문자 상관없이($option:i)
     find_list = list(db.asmrs.find({'title': {'$regex':word_receive,'$options':'i'}}))
 
+    # 검색어가 포함된 데이터를 search.html로 전달
     return render_template('search.html', find_asmr=find_list)
 
+# asmr 데이터 저장
 @app.route('/saveAsmr', methods=['POST'])
 def saveAsmr():
     title_receive = request.form['title_give']
     link_receive = request.form['link_give']
     img_receive = request.form['img_give']
 
+    # db에서 asmr콜렉션에 데이터 저장
     doc = {
         'title': title_receive,
         'link': link_receive,
@@ -160,6 +170,7 @@ def saveAsmr():
     }
     db.asmrs.insert_one(doc)
 
+    # 저장 후 저장완료 메세지 전달
     return jsonify({'result': 'success', 'msg': '저장 완료'})
 
 
@@ -220,25 +231,29 @@ def getViewers():
         if data.ok:
             #현재 영상이 Live 영상인지 확인
             if (data.text.find('"isLiveContent":true') != -1):
-                # 가져온 페이지 데이터를 text 형태로 변환해 videoViewCountRenderer란 단어를 검색한 뒤 그 위치 반환
-                startIndex = data.text.find('videoViewCountRenderer')
+                if (data.text.find('"isLiveNow":true') != -1):
+                    # 가져온 페이지 데이터를 text 형태로 변환해 videoViewCountRenderer란 단어를 검색한 뒤 그 위치 반환
+                    startIndex = data.text.find('videoViewCountRenderer')
 
-                # 만약 검색된 단어위치가 존재한다면 실행
-                if (startIndex != -1):
-                    # videoViewCountRenderer 검색된 위치부터 isLive란 단어를 검색해 그 위치를 찾음
-                    endIndex = data.text.find('isLive', startIndex)
-                    # 검색된 단어들의 위치를 기반으로 텍스트를 잘라냄
-                    targetText = data.text[startIndex:endIndex]
-                    # 잘라낸 텍스트에서 문자를 제거하고 숫자(시청자 수)를 추출함
-                    viewers = re.sub(r'[^0-9]', '', targetText)
-                db.asmrs.update_one({'_id': asmr['_id']}, {"$set": {"viewers": viewers}})
+                    # 만약 검색된 단어위치가 존재한다면 실행
+                    if (startIndex != -1):
+                        # videoViewCountRenderer 검색된 위치부터 isLive란 단어를 검색해 그 위치를 찾음
+                        endIndex = data.text.find('"isLive":true', startIndex)
+                        # 검색된 단어들의 위치를 기반으로 텍스트를 잘라냄
+                        targetText = data.text[startIndex:endIndex]
+                        # 잘라낸 텍스트에서 문자를 제거하고 숫자(시청자 수)를 추출함
+                        viewers = re.sub(r'[^0-9]', '', targetText)
+                    db.asmrs.update_one({'_id': asmr['_id']}, {"$set": {"viewers": viewers}})
+                else:
+                    db.asmrs.update_one({'_id': asmr['_id']}, {"$set": {"viewers": 'Not Live'}})
             else:
-                db.asmrs.update_one({'_id': asmr['_id']}, {"$set": {"viewers": ''}})
+                db.asmrs.update_one({'_id': asmr['_id']}, {"$set": {"viewers": 'Not Streaming'}})
 
 
-# 스케쥴러를 이용해 1 시간마다 크롤링
+
 scheduler = BackgroundScheduler()
-scheduler.add_job(func=getViewers, trigger="interval", seconds=6000)
+# 스케쥴러를 이용해 1 시간마다 크롤링(getViewers 함수를 호출)
+scheduler.add_job(func=getViewers, trigger="interval", seconds=3600)
 scheduler.start()
 
 # 디버그 모드에선 플라스크는 앱을 두번 로드함

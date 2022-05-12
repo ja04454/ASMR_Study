@@ -55,14 +55,13 @@
         $(document).ready(function () {
             showStar();
         });
-
+        // 검색어를 get방식으로 search페이지로 보내기
         function search() {
             let word = $("#input-word").val()
 
             if (word == "") {
                 alert("검색어을 입력하세요")
             }else {
-                alert(word)
                 window.location.href='/search?word='+word
             }
 
@@ -120,28 +119,30 @@
     </script>
 </head>
 
-<body style="background-color: #303030">
-<nav class="navbar navbar-expand-lg navbar-dark common-bg-dark">
+<body class="common-bg-lightdark">
+<nav class="navbar navbar-expand-lg navbar-dark common-bg-dark em-14">
     <div class="container-fluid">
         <a class="navbar-brand" href="/main">
             <img src="static/logo2.svg" alt="" width="150" class="d-inline-block align-text-top">
         </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse text-white" id="navbarNavDropdown">
-            <ul class="navbar-nav">
+        <div class="collapse navbar-collapse text-white" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
                     <a class="nav-link active" aria-current="page" href="/main">메인</a>
                 </li>
+                <li class="nav-item common-nav-show">
+                    <a class="nav-link active" aria-current="page" onclick="logout()">로그아웃</a>
+                </li>
             </ul>
+            <form class="d-flex">
+                <a class="btn common-btn-grayblue common-nav-hide text-right" onclick="logout()">로그아웃</a>
+            </form>
         </div>
-        <form class="d-flex">
-            <a class="btn common-btn-grayblue" onclick="logout()">로그아웃</a>
-        </form>
     </div>
 </nav>
-
 <div class="container-fluid">
     <div class="row">
         <div class="col-4 m-auto my-4">
@@ -155,20 +156,25 @@
     </div>
 
     <!-- asmr 추가하기 modal -->
-    <div>
-        <button id="open_modal" type="button" data-toggle="modal" data-target="#myModal">추가하기</button>
-        <div class="modal fade" id="myModal" data-backdrop="static" data-keyboard="false">
-            <div class="modal-dialog modal-l modal-dialog-centered">
-                <div class="modal-content">
+<<<<<<< Updated upstream
+    <div class="row">
+        <div class="col m-auto text-center">
+            <button id="open_modal" type="button" class="btn common-btn-grayblue" data-toggle="modal" data-target="#myModal">ASMR 추가하기</button>
+        </div>
+    </div>
 
-                    <!-- Modal Header -->
-                    <div class="modal-header">
-                        <h4 class="modal-title">ASMR 영상 추가하기</h4>
-                    </div>
+    <div class="modal fade text-white" id="myModal" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog modal-l modal-dialog-centered">
+            <div class="modal-content">
 
-                    <!-- Modal body -->
-                    <form id="myform" >
-                    <div class="modal-body">
+                <!-- Modal Header -->
+                <div class="modal-header common-bg-dark border-0">
+                    <h4 class="modal-title">ASMR 영상 추가하기</h4>
+                </div>
+
+                <!-- Modal body -->
+                <form id="myform" >
+                    <div class="modal-body common-bg-lightdark border-0">
                         <div class="mb-3 row">
                             <label for="title" class="col-sm-2 col-form-label">TITLE</label>
                             <div class="col-sm-10">
@@ -188,31 +194,28 @@
                             </div>
                         </div>
                     </div>
-
                     <!-- Modal footer -->
-                    <div class="modal-footer">
-                        <button id="save_modal" type="button" class="btn btn-secondary">Save</button>
-                        <button id="close_modal"type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <div class="modal-footer common-bg-lightdark border-0">
+                        <button id="save_modal" type="button" class="btn common-btn-grayblue">Save</button>
+                        <button id="close_modal"type="button" class="btn common-btn-grayblue" data-dismiss="modal">Close</button>
                     </div>
-                    </form>
-                </div>
+                </form>
             </div>
         </div>
     </div>
-
     <div class="w-75 text-white m-auto">
-        <h2>Hot list</h2>
+        <h2>ASMR list</h2>
     </div>
-    <div id="asmr_content" class="d-flex flex-row flex-nowrap row row-cols-auto w-75 text-white m-auto common-over-hide">
+    <div id="asmr_content" class="d-flex flex-row flex-nowrap row row-cols-auto w-75 text-white m-auto common-over-hide common-scrollbar">
         <!-- jinja2를 사용해 Server에서 처리되는 구문들 -->
         {% if asmrs %}
         {% for asmr in asmrs %}
         <div class="col">
-            <div class="card common-bg-dark common-border-dark my-2" style="width: 18rem;">
+            <div class="card common-bg-dark common-border-dark my-2" style="width: 18rem; height: 95%">
                 <img src="{{ asmr.img }}" class="card-img-top" alt="{{ asmr.link }}" onclick="location.href='{{ asmr.link }}';">
                 <div class="card-body">
                     <p class="card-text common-post-text common-text-elli">{{ asmr.title }}</p>
-                    <p>시청자 수: <span class="viewers">{{ asmr.viewers }}</span>
+                    <p class="common-viewer-text">시청자 수: {{ asmr.viewers }}
                     </p>
                 </div>
 
@@ -233,18 +236,18 @@
     <div class="w-75 text-white m-auto mt-5">
         <h2>즐겨찾기 list</h2>
     </div>
-    <div id="star_content" class="d-flex flex-row flex-nowrap row row-cols-auto w-75 text-white m-auto common-over-hide">
+    <div id="star_content" class="d-flex flex-row flex-nowrap row row-cols-auto w-75 text-white m-auto common-over-hide common-scrollbar">
         <!-- jinja2를 사용해 Server에서 처리되는 구문들 -->
         {% if lists %}
             {% for list in lists %}
                 {% for li in list %}
                     <div class="col">
-                        <div class="card common-bg-dark common-border-dark my-2" style="width: 18rem;">
+                        <div class="card common-bg-dark common-border-dark my-2" style="width: 18rem; height: 95%">
                             <img src="{{ li.img }}" class="card-img-top" alt="{{ li.link }}"
                                  onclick="location.href='{{ li.link }}';">
                             <div class="card-body">
                                 <p class="card-text common-post-text common-text-elli">{{ li.title }}</p>
-                                <p>시청자 수: <span class="viewers">{{ li.viewers }}</span>
+                                <p class="common-viewer-text">시청자 수: {{ li.viewers }}
                                 </p>
                             </div>
 
@@ -263,32 +266,59 @@
         {% endif %}
     </div>
 </div>
+
 <script>
+    //asmr 영역에서 마우스 휠 이용시 스크롤이 되도록 이벤트 등록
     $("#asmr_content, #star_content").on('mousewheel',function(e){
+        //휠 이동 값을 가져옴
         var wheelDelta = e.originalEvent.wheelDelta;
+        //휠 이동의 음수, 정수 구분에 따라서 왼쪽, 오른쪽 구분 후 가감 진행
         if(wheelDelta > 0){
+            //현재 요소의 스크롤 위치에 따라서 가감을 하는 방식으로 스크롤 진행
+            //이벤트 중첩을 막기 위해 현재 진행중인 이벤트를 중단시킨 뒤 스크롤 이벤트를 새로 진행
             $(this).stop().animate({scrollLeft: -1000 + $(this).scrollLeft()}, 100);
         }else{
             $(this).stop().animate({scrollLeft: +1000 + $(this).scrollLeft()}, 100);
         }
+        //스크롤 이벤트가 다른 이벤트에 영향을 받지 않도록 false를 반환해 이벤트를 종료시킴
         return false;
     });
 </script>
+
 <script>
+    // 모달창 열기
     $('#open_modal').click(function (e) {
         e.preventDefault();
         $('#myModal').modal("show");
     });
-
+    // 모달창 닫기
     $('#close_modal').click(function (e) {
         $('#myModal').modal("hide");
     });
-
+    // 데이터 저장하기
     $('#save_modal').click(function (e) {
         let title = $('#title').val()
         let link = $('#link').val()
         let img = $('#image').val()
 
+        // 데이터 유효성 검사
+        if (title == "") {
+            alert("제목을 입력해주세요")
+            $("#title").focus()
+            return;
+        }
+        if (link == "") {
+            alert("URL주소를 입력해주세요")
+            $("#link").focus()
+            return;
+        }
+        if (img == "") {
+            alert("이미지 주소를 입력해주세요")
+            $("#image").focus()
+            return;
+        }
+
+        // 모달창에서 입력받은 데이터 서버로 보내기
         $.ajax({
             type: "POST",
             url: "/saveAsmr",
@@ -298,7 +328,9 @@
                 img_give: img
             },
             success: function (response) {
+                // 모달창 입력값 초기화
                 $('#myform')[0].reset()
+                // 모달창 닫기
                 $('#myModal').modal("hide")
                 alert(response['msg'])
                 window.location.reload()
