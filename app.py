@@ -12,37 +12,38 @@ from bson.objectid import ObjectId
 from datetime import datetime, timedelta
 from apscheduler.schedulers.background import BackgroundScheduler
 
-client = MongoClient('mongodb+srv://test:sparta@cluster0.2rz7w.mongodb.net/Cluster0?retryWrites=true&w=majority',
-                     tlsCAFile=certifi.where())
+client = MongoClient('mongodb+srv://test:sparta@cluster0.p0pyn.mongodb.net/Cluster0?retryWrites=true&w=majority')
 db = client.ASMR_Study
 
 app = Flask(__name__)
 
 SECRET_KEY = 'SPARTA'
 
-#jwt id 가져오기 모듈화
+
+# jwt id 가져오기 모듈화
 def GetJwtId():
     # token_check()
-    #mytoken이라는 이름으로 저장된 사용자의 쿠키 정보를 가져옴
+    # mytoken이라는 이름으로 저장된 사용자의 쿠키 정보를 가져옴
     token_receive = request.cookies.get('mytoken')
-    #jwt 해독 기능을 이용해 가져온 토큰 정보를 암호키와 함께 HS256 방식으로 해석해 저장함
+    # jwt 해독 기능을 이용해 가져온 토큰 정보를 암호키와 함께 HS256 방식으로 해석해 저장함
     payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
-    #해독 된 사용자 정보에서 id 정보를 꺼내 DB에서 유저 정보 검색 실행
+    # 해독 된 사용자 정보에서 id 정보를 꺼내 DB에서 유저 정보 검색 실행
     user_info = db.user.find_one({"username": payload["id"]})
-    #유저의 아이디를 반환함
+    # 유저의 아이디를 반환함
     return user_info['username']
+
 
 @app.route('/')
 def intro():
-    #jinja2 방식으로 intro.html 페이지를 서버에서 렌더링 한 뒤 사용자에게 제공
+    # jinja2 방식으로 intro.html 페이지를 서버에서 렌더링 한 뒤 사용자에게 제공
     return render_template('intro.html')
 
 
 @app.route('/login')
 def login():
-    #클라이언트에서 전송된 MultiDict 데이터에서 "msg"키를 가진 데이터의 값을 가져옴
+    # 클라이언트에서 전송된 MultiDict 데이터에서 "msg"키를 가진 데이터의 값을 가져옴
     msg = request.args.get("msg")
-    #렌더링 시 변수를 페이지에서 사용하기 위해 msg 데이터를 담아줌
+    # 렌더링 시 변수를 페이지에서 사용하기 위해 msg 데이터를 담아줌
     return render_template('login.html', msg=msg)
 
 
@@ -57,7 +58,7 @@ def home():
         user_info = db.user.find_one({"username": payload["id"]})
         users_star = user_info['star']
 
-        #유저의 즐겨찾기에 있는 즐겨찾기들의 상세 정보를 불러온다.
+        # 유저의 즐겨찾기에 있는 즐겨찾기들의 상세 정보를 불러온다.
         star_arr = []
         for x in users_star:
             temp = list(db.asmrs.find({"_id": ObjectId(x)}))
@@ -67,14 +68,14 @@ def home():
         # 렌더링 시 asmrs라는 이름으로 가져온 asmr_list 데이터를 보내줌
         return render_template('main.html', user_info=user_info, asmrs=asmr_list, lists=star_arr, users_star=users_star)
 
-
+    # 유저 아이디가 없다면
     except jwt.ExpiredSignatureError:
         return redirect(url_for("login", msg="로그인 시간이 만료되었습니다."))
     except jwt.exceptions.DecodeError:
         return redirect(url_for("login", msg="로그인 정보가 존재하지 않습니다."))
 
 
-#즐찾삭제
+# 즐찾삭제
 @app.route('/deleteStar', methods=['PUT'])
 def deleteStar():
     id = request.form['id']
@@ -82,17 +83,18 @@ def deleteStar():
 
     db.user.update_one({'username': username}, {'$pull': {'star': id}})
 
-    return jsonify({'id': id , 'username':username})
+    return jsonify({'id': id, 'username': username})
 
-#즐찾추가
+
+# 즐찾추가
 @app.route('/addStar', methods=['PUT'])
 def addStar():
     id = request.form['id']
     username = GetJwtId()
 
-    db.user.update_one({'username':username},{'$push':{'star':{'$each':[id],'$position':0}}})
+    db.user.update_one({'username': username}, {'$push': {'star': {'$each': [id], '$position': 0}}})
 
-    return jsonify({'id': id , 'username':username})
+    return jsonify({'id': id, 'username': username})
 
 
 @app.route('/sign_in', methods=['POST'])
@@ -101,16 +103,22 @@ def sign_in():
     username_receive = request.form['username_give']
     password_receive = request.form['password_give']
 
+    # 입력받은 pw 암호화
     pw_hash = hashlib.sha256(password_receive.encode('utf-8')).hexdigest()
+    # id, 암호화된 pw로 해당 유저 찾음
     result = db.user.find_one({'username': username_receive, 'password': pw_hash})
 
+    # 유저가 있으면
     if result is not None:
+        # 로그인 한 사람의 id와 로그인이 언제까지 유효한지 정보
         payload = {
             'id': username_receive,
             'exp': datetime.utcnow() + timedelta(seconds=60 * 60 * 24)  # 로그인 24시간 유지
         }
+        # SECRET_KEY로 암호화
         token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
 
+        # 토큰을 준다
         return jsonify({'result': 'success', 'token': token})
     # 찾지 못하면
     else:
@@ -119,13 +127,15 @@ def sign_in():
 
 @app.route('/sign_up/save', methods=['POST'])
 def sign_up():
+    # 회원가입
     username_receive = request.form['username_give']
     password_receive = request.form['password_give']
     password_hash = hashlib.sha256(password_receive.encode('utf-8')).hexdigest()
+
     doc = {
-        "username": username_receive,
-        "password": password_hash,
-        "star":[]
+        "username": username_receive,   # 아이디
+        "password": password_hash,      # 비밀번호
+        "star": []                      # 즐겨찾기
     }
     db.user.insert_one(doc)
     return jsonify({'result': 'success'})
@@ -133,7 +143,9 @@ def sign_up():
 
 @app.route('/sign_up/check_dup', methods=['POST'])
 def check_dup():
+    # ID 중복 확인
     username_receive = request.form['username_give']
+    # id가 하나라도 존재한다면 true
     exists = bool(db.user.find_one({"username": username_receive}))
     return jsonify({'result': 'success', 'exists': exists})
 
@@ -144,10 +156,11 @@ def search():
 
     # db에서 'title'에 검색할 단어가 포함되어 있는 도큐먼트 조회
     # 조건 - 특정 문자 포함($regex), 대소문자 상관없이($option:i)
-    find_list = list(db.asmrs.find({'title': {'$regex':word_receive,'$options':'i'}}))
+    find_list = list(db.asmrs.find({'title': {'$regex': word_receive, '$options': 'i'}}))
 
     # 검색어가 포함된 데이터를 search.html로 전달
     return render_template('search.html', find_asmr=find_list)
+
 
 # asmr 데이터 저장
 @app.route('/saveAsmr', methods=['POST'])
@@ -223,7 +236,7 @@ def getViewers():
 
         # requests가 정상인 경우
         if data.ok:
-            #현재 영상이 Live 영상인지 확인
+            # 현재 영상이 Live 영상인지 확인
             if (data.text.find('"isLiveContent":true') != -1):
                 if (data.text.find('"isLiveNow":true') != -1):
                     # 가져온 페이지 데이터를 text 형태로 변환해 videoViewCountRenderer란 단어를 검색한 뒤 그 위치 반환
@@ -242,7 +255,6 @@ def getViewers():
                     db.asmrs.update_one({'_id': asmr['_id']}, {"$set": {"viewers": 'Not Live'}})
             else:
                 db.asmrs.update_one({'_id': asmr['_id']}, {"$set": {"viewers": 'Not Streaming'}})
-
 
 
 scheduler = BackgroundScheduler()
