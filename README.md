@@ -28,7 +28,9 @@
 <br/>
 
 ## 🎬5. 시연영상
-[링크](https://www.youtube.com/watch?v=DAp8p_TUawk)  
+<p align="center">
+  <img width="95%" alt="intro" src="https://user-images.githubusercontent.com/33679560/168020395-c2bddcab-acbd-4825-a9db-ca966643ed33.gif">  
+</p> 
 <br/>
 
 ## 📌6. 핵심기능
