@@ -7,6 +7,7 @@ import certifi
 import re
 import jwt
 import hashlib
+from bson.objectid import ObjectId
 
 from datetime import datetime, timedelta
 from apscheduler.schedulers.background import BackgroundScheduler
@@ -59,7 +60,7 @@ def home():
         #유저의 즐겨찾기에 있는 즐겨찾기들의 상세 정보를 불러온다.
         star_arr = []
         for x in users_star:
-            temp = list(db.asmrs.find({"id": x}))
+            temp = list(db.asmrs.find({"_id": ObjectId(x)}))
             star_arr.append(temp)
 
         # Jinja2 방식으로 SSR(Server side rendering)를 사용해 main.html 페이지를 렌더링
