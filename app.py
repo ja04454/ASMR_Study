@@ -143,23 +143,26 @@ def check_dup():
     exists = bool(db.user.find_one({"username": username_receive}))
     return jsonify({'result': 'success', 'exists': exists})
 
-
+# 검색
 @app.route("/search", methods=["GET"])
 def search():
-
     word_receive = request.args['word']
 
-    # db에서 특정 문자 포함($regex), 옵션(대소문자 상관없이)을 줘서 가져옴
+    # db에서 'title'에 검색할 단어가 포함되어 있는 도큐먼트 조회
+    # 조건 - 특정 문자 포함($regex), 대소문자 상관없이($option:i)
     find_list = list(db.asmrs.find({'title': {'$regex':word_receive,'$options':'i'}}))
 
+    # 검색어가 포함된 데이터를 search.html로 전달
     return render_template('search.html', find_asmr=find_list)
 
+# asmr 데이터 저장
 @app.route('/saveAsmr', methods=['POST'])
 def saveAsmr():
     title_receive = request.form['title_give']
     link_receive = request.form['link_give']
     img_receive = request.form['img_give']
 
+    # db에서 asmr콜렉션에 데이터 저장
     doc = {
         'title': title_receive,
         'link': link_receive,
@@ -167,6 +170,7 @@ def saveAsmr():
     }
     db.asmrs.insert_one(doc)
 
+    # 저장 후 저장완료 메세지 전달
     return jsonify({'result': 'success', 'msg': '저장 완료'})
 
 

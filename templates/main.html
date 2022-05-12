@@ -55,14 +55,13 @@
         $(document).ready(function () {
             showStar();
         });
-
+        // 검색어를 get방식으로 search페이지로 보내기
         function search() {
             let word = $("#input-word").val()
 
             if (word == "") {
                 alert("검색어을 입력하세요")
             }else {
-                alert(word)
                 window.location.href='/search?word='+word
             }
 
@@ -157,6 +156,7 @@
     </div>
 
     <!-- asmr 추가하기 modal -->
+<<<<<<< Updated upstream
     <div class="row">
         <div class="col m-auto text-center">
             <button id="open_modal" type="button" class="btn common-btn-grayblue" data-toggle="modal" data-target="#myModal">ASMR 추가하기</button>
@@ -194,7 +194,6 @@
                             </div>
                         </div>
                     </div>
-
                     <!-- Modal footer -->
                     <div class="modal-footer common-bg-lightdark border-0">
                         <button id="save_modal" type="button" class="btn common-btn-grayblue">Save</button>
@@ -287,20 +286,22 @@
 </script>
 
 <script>
+    // 모달창 열기
     $('#open_modal').click(function (e) {
         e.preventDefault();
         $('#myModal').modal("show");
     });
-
+    // 모달창 닫기
     $('#close_modal').click(function (e) {
         $('#myModal').modal("hide");
     });
-
+    // 데이터 저장하기
     $('#save_modal').click(function (e) {
         let title = $('#title').val()
         let link = $('#link').val()
         let img = $('#image').val()
 
+        // 데이터 유효성 검사
         if (title == "") {
             alert("제목을 입력해주세요")
             $("#title").focus()
@@ -317,6 +318,7 @@
             return;
         }
 
+        // 모달창에서 입력받은 데이터 서버로 보내기
         $.ajax({
             type: "POST",
             url: "/saveAsmr",
@@ -326,7 +328,9 @@
                 img_give: img
             },
             success: function (response) {
+                // 모달창 입력값 초기화
                 $('#myform')[0].reset()
+                // 모달창 닫기
                 $('#myModal').modal("hide")
                 alert(response['msg'])
                 window.location.reload()
